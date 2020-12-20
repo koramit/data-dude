@@ -17,7 +17,7 @@ class CreateDudesTable extends Migration
             $table->id();
             $table->string('key');
             $table->string('target');
-            $table->longText('body');
+            $table->string('body');
             $table->timestamps();
         });
     }
