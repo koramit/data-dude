@@ -11,8 +11,12 @@
 <body>
     <h1>Data Dude</h1>
 
-    <div id="feedback"></div>
+    <input type="number" placeholder="start" id="input_start">
+    <input type="number" placeholder="stop" id="input_stop">
+    <button
+        onclick="runDudeSync(document.getElementById('input_start').value, document.getElementById('input_stop').value);">run</button>
 
+    <div id="feedback"></div>
     <script>
         var request = new XMLHttpRequest();
         var form = null;
@@ -44,87 +48,86 @@
         }
 
         function extractDude(form) {
-            let data = {};
+            let data = new FormData();
             let item = null;
 
-            let data1 = new FormData();
-
-            data1.append('an', extractValue(form, '#AN', 'value'));
-            data1.append('hn', extractValue(form, '#HN', 'value'));
-            data1.append('patient_name', extractValue(form, '#pname', 'value'));
-            data1.append('patient_age', extractValue(form, '#Age', 'value'));
-            data1.append('encountered_at', extractValue(form, '#Admit_Date', 'value'));
-            data1.append('discharged_at', extractValue(form, '#Discharge_Date', 'value'));
-            data1.append('length_of_stay', extractValue(form, '#inhospital', 'value'));
+            data.append('an', extractValue(form, '#AN', 'value'));
+            data.append('hn', extractValue(form, '#HN', 'value'));
+            data.append('patient_name', extractValue(form, '#pname', 'value'));
+            data.append('patient_age', extractValue(form, '#Age', 'value'));
+            data.append('encountered_at', extractValue(form, '#Admit_Date', 'value'));
+            data.append('discharged_at', extractValue(form, '#Discharge_Date', 'value'));
+            data.append('length_of_stay', extractValue(form, '#inhospital', 'value'));
 
             // ward
-            data.ward = extractValue(form, '#MD_Ward', 'innerText', true);
+            data.append('ward', extractValue(form, '#MD_Ward', 'innerText', true));
 
             // attending
             item = extractValue(form, '#AttendingStaff', 'innerHTML', true);
             if (item) {
-                data.attending_staff = item.split(' | ')[0];
-                data.attending_staff_division = item.split(' | ')[1];
+                data.append('attending_staff', item.split(' | ')[0]);
+                data.append('attending_staff_division', item.split(' | ')[1]);
             } else {
-                data.attending_staff = null;
-                data.attending_staff_division = null;
+                data.append('attending_staff', null);
+                data.append('attending_staff_division', null);
             }
 
             // author
             item = extractValue(form, '#Resident', 'innerHTML', true);
             if (item) {
-                data.author = item.split(' | ')[1];
-                data.author_pln = item.split(' | ')[0];
+                data.append('author', item.split(' | ')[1]);
+                data.append('author_pln', item.split(' | ')[0]);
             } else {
-                data.author = null;
-                data.author_pln = null;
+                data.append('author', null);
+                data.append('author_pln', null);
             }
 
             // division
             let division = extractValue(form, 'select[name=division1]', 'innerText', true);
-            data.primary_division = division ? division.split(' | ')[1] : null;
+            data.append('primary_division', division ? division.split(' | ')[1] : null);
             division = extractValue(form, 'select[name=division2]', 'innerText', true);
-            data.secondary_division = division ? division.split(' | ')[1] : null;
+            data.append('secondary_division', division ? division.split(' | ')[1] : null);
 
-            data.principal_diagnosis = extractValue(form, '#PrincipalDx', 'innerText');
-            data.admit_reason = extractValue(form, '#ReasonForAdmission', 'innerText');
-            data.comorbids = extractValue(form, '#Comorbids', 'innerText');
-            data.complications = extractValue(form, '#Complication', 'innerText');
-            data.external_cause = extractValue(form, '#Extcause', 'innerText');
-            data.other_diagnosis = extractValue(form, '#OtherDiag', 'innerText');
-            data.OR_procedures = extractValue(form, '#OrProcedure', 'innerText');
-            data.non_OR_Procedures = extractValue(form, '#NonOrProcedure', 'innerText');
-            data.chief_complaint = extractValue(form, '#CheifComplaint', 'innerText');
-            data.significant_findings = extractValue(form, '#SignFinding', 'innerText');
-            data.significant_procedures = extractValue(form, '#SignProcedure', 'innerText');
-            data.hospital_course = extractValue(form, '#Hosp', 'innerText');
-            data.condition_upon_discharge = extractValue(form, '#DC', 'innerText');
-            data.follow_up_instruction = extractValue(form, '#FollowInstruction', 'innerText');
+            data.append('principal_diagnosis', extractValue(form, '#PrincipalDx', 'innerText'));
+            data.append('admit_reason', extractValue(form, '#ReasonForAdmission', 'innerText'));
+            data.append('comorbids', extractValue(form, '#Comorbids', 'innerText'));
+            data.append('complications', extractValue(form, '#Complication', 'innerText'));
+            data.append('external_cause', extractValue(form, '#Extcause', 'innerText'));
+            data.append('other_diagnosis', extractValue(form, '#OtherDiag', 'innerText'));
+            data.append('OR_procedures', extractValue(form, '#OrProcedure', 'innerText'));
+            data.append('non_OR_Procedures', extractValue(form, '#NonOrProcedure', 'innerText'));
+            data.append('chief_complaint', extractValue(form, '#CheifComplaint', 'innerText'));
+            data.append('significant_findings', extractValue(form, '#SignFinding', 'innerText'));
+            data.append('significant_procedures', extractValue(form, '#SignProcedure', 'innerText'));
+            data.append('hospital_course', extractValue(form, '#Hosp', 'innerText'));
+            data.append('condition_upon_discharge', extractValue(form, '#DC', 'innerText'));
+            data.append('follow_up_instruction', extractValue(form, '#FollowInstruction', 'innerText'));
 
             // discharge
             let discharge = extractValue(form, '#ds', 'innerText', true);
-            data.discharge_status = discharge || null;
+            data.append('discharge_status', discharge || null);
             discharge = extractValue(form, '#dt', 'innerText', true);
-            data.discharge_type = discharge || null;
+            data.append('discharge_type', discharge || null);
 
-            data.significant_medications = extractValue(form, 'WardRx', 'innerText');
-            data.home_medications = extractValue(form, 'HomeRx', 'innerText');
-            data.interesting_case = extractValue(form, '#InterestingCase', 'checked');
-            data.completed = extractValue(form, '#Complete', 'checked');
+            data.append('significant_medications', extractValue(form, 'WardRx', 'innerText'));
+            data.append('home_medications', extractValue(form, 'HomeRx', 'innerText'));
+            data.append('interesting_case', extractValue(form, '#InterestingCase', 'checked'));
+            data.append('completed', extractValue(form, '#Complete', 'checked'));
 
             if (data.discharge_status === 'DEAD') {
-                data.dead_report_charecter_of_death = extractValue(form, 'input[name=COD][checked]', 'value');
+                data.append('dead_report_charecter_of_death', extractValue(form, 'input[name=COD][checked]', 'value'));
                 if (data.dead_report_charecter_of_death) {
-                    data.dead_report_charecter_of_death = deads[parseInt(data.dead_report_charecter_of_death) - 1];
+                    data.append('dead_report_charecter_of_death', deads[parseInt(data.dead_report_charecter_of_death) -
+                        1]);
                 }
-                data.dead_report_cause_of_dead_a = extractValue(form, '#LeadingtoDeath', 'innerText');
-                data.dead_report_cause_of_dead_b = extractValue(form, '#Dueto1', 'innerText');
-                data.dead_report_cause_of_dead_c = extractValue(form, '#Dueto2', 'innerText');
-                data.dead_report_cause_of_dead_d = extractValue(form, '#Dueto3', 'innerText');
-                data.dead_report_other_significant_conditions = extractValue(form, '#OtherSign', 'innerText');
+                data.append('dead_report_cause_of_dead_a', extractValue(form, '#LeadingtoDeath', 'innerText'));
+                data.append('dead_report_cause_of_dead_b', extractValue(form, '#Dueto1', 'innerText'));
+                data.append('dead_report_cause_of_dead_c', extractValue(form, '#Dueto2', 'innerText'));
+                data.append('dead_report_cause_of_dead_d', extractValue(form, '#Dueto3', 'innerText'));
+                data.append('dead_report_other_significant_conditions', extractValue(form, '#OtherSign', 'innerText'));
             }
 
-            return data1;
+            return data;
         }
 
         function extractValue(node, query, attribute, isSelect = false) {
