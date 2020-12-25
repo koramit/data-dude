@@ -43,7 +43,7 @@
                 request.responseText.indexOf("</body>") - 1
             );
             form = extractDude(dom);
-            request.open('POST', `/dudes/dc/${id}`, false);
+            request.open('POST', `/dudes/discharge/${id}`, false);
             request.send(form);
         }
 

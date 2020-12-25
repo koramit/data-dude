@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\DudeForm;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,7 @@ Route::get('/', function () {
 });
 
 Route::post('/dudes/{form}/{key}', function ($form, $key) {
-    Log::info(Request::all());
+    DudeForm::create(['key' => $key, 'form' => $form, 'content' => Request::all()]);
+    // Log::info(Request::all());
     return 'ok';
 });
