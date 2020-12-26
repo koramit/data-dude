@@ -47,7 +47,7 @@ Route::post('/call-dude/{id}', function ($id) {
 
     $body = substr($body, $begin, strpos($body, '</body>') - 1 - $begin);
 
-    return $body;
+    return iconv('cp874', 'utf-8//IGNORE', $body);
 });
 
 Route::post('/dudes/{form}/{key}', function ($form, $key) {
