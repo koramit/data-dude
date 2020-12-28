@@ -16,6 +16,7 @@
     <button
         onclick="runDudeSync(document.getElementById('input_start').value, document.getElementById('input_stop').value);">run</button>
 
+    <div id="feedback"></div>
     <script>
         var request = new XMLHttpRequest();
         var form = null;
