@@ -64,7 +64,7 @@
             data.append('Age', extractValue(dom, 'input#Age', 'value'));
 
             // * attending: option => select[name=Staff]
-            item = extractValue(form, 'select[name=Staff]', 'innerHTML', true);
+            item = extractValue(dom, 'select[name=Staff]', 'innerHTML', true);
             if (item) {
                 data.append('attending_staff', item.split(' | ')[0]);
                 data.append('attending_staff_division', item.split(' | ')[1]);
