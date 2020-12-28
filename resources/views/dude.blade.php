@@ -511,7 +511,7 @@
             }
 
             // * review head: input[name=review_head][checked] => value
-            if (dom.queryselector('input[name=review_head]')) {
+            if (dom.querySelector('input[name=review_head]')) {
                 console.log('review_head');
             } else {
                 console.log('ERROR : review_head');
@@ -525,7 +525,7 @@
             }
 
             // * review eye: input[name=review_eye][checked] => value
-            if (dom.queryselector('input[name=review_eye]')) {
+            if (dom.querySelector('input[name=review_eye]')) {
                 console.log('review_eye');
             } else {
                 console.log('ERROR : review_eye');
@@ -539,7 +539,7 @@
             }
 
             // * review cvs: input[name=review_cvs][checked] => value
-            if (dom.queryselector('input[name=review_cvs]')) {
+            if (dom.querySelector('input[name=review_cvs]')) {
                 console.log('review_cvs');
             } else {
                 console.log('ERROR : review_cvs');
@@ -553,7 +553,7 @@
             }
 
             // * review RS: input[name=review_rs][checked] => value
-            if (dom.queryselector('input[name=review_rs]')) {
+            if (dom.querySelector('input[name=review_rs]')) {
                 console.log('review_rs');
             } else {
                 console.log('ERROR : review_rs');
@@ -567,7 +567,7 @@
             }
 
             // * review GI: input[name=review_GI][checked] => value
-            if (dom.queryselector('input[name=review_GI]')) {
+            if (dom.querySelector('input[name=review_GI]')) {
                 console.log('review_GI');
             } else {
                 console.log('ERROR : review_GI');
@@ -581,7 +581,7 @@
             }
 
             // * review GU: input[name=review_GU][checked] => value
-            if (dom.queryselector('input[name=review_GU]')) {
+            if (dom.querySelector('input[name=review_GU]')) {
                 console.log('review_GU');
             } else {
                 console.log('ERROR : review_GU');
@@ -595,7 +595,7 @@
             }
 
             // * review Musculoskeletal system: input[name=review_musculo][checked] => value
-            if (dom.queryselector('input[name=review_musculo]')) {
+            if (dom.querySelector('input[name=review_musculo]')) {
                 console.log('review_musculo');
             } else {
                 console.log('ERROR : review_musculo');
@@ -609,7 +609,7 @@
             }
 
             // * review Nervous system: input[name=review_nerv][checked] => value
-            if (dom.queryselector('input[name=review_nerv]')) {
+            if (dom.querySelector('input[name=review_nerv]')) {
                 console.log('review_nerv');
             } else {
                 console.log('ERROR : review_nerv');
@@ -623,7 +623,7 @@
             }
 
             // * review Psychological sysmptoms: input[name=review_psych][checked] => value
-            if (dom.queryselector('input[name=review_psych]')) {
+            if (dom.querySelector('input[name=review_psych]')) {
                 console.log('review_psych');
             } else {
                 console.log('ERROR : review_psych');
@@ -637,63 +637,63 @@
             }
 
             // * review other detail: textarea[name=review_other_text] => innerText
-            if (dom.queryselector('input[name=review_other_text]')) {
+            if (dom.querySelector('input[name=review_other_text]')) {
                 console.log('review_other_text');
             } else {
                 console.log('ERROR : review_other_text');
             }
 
             // * NG tube/NG suction: input[name=require_NG] => checked
-            if (dom.queryselector('input[name=require_NG]')) {
+            if (dom.querySelector('input[name=require_NG]')) {
                 console.log('require_NG');
             } else {
                 console.log('ERROR : require_NG');
             }
 
             // * Gastrostomy feeding: input[name=require_feeding] => checked
-            if (dom.queryselector('input[name=require_feeding]')) {
+            if (dom.querySelector('input[name=require_feeding]')) {
                 console.log('require_feeding');
             } else {
                 console.log('ERROR : require_feeding');
             }
 
             // * Urinary cath. care: input[name=require_urinary] => checked
-            if (dom.queryselector('input[name=require_urinary]')) {
+            if (dom.querySelector('input[name=require_urinary]')) {
                 console.log('require_urinary');
             } else {
                 console.log('ERROR : require_urinary');
             }
 
             // * Tracheostomy care: input[name=require_trache] => checked
-            if (dom.queryselector('input[name=require_trache]')) {
+            if (dom.querySelector('input[name=require_trache]')) {
                 console.log('require_trache');
             } else {
                 console.log('ERROR : require_trache');
             }
 
             // * Hearing impairment: input[name=require_hearing] => checked
-            if (dom.queryselector('input[name=require_hearing]')) {
+            if (dom.querySelector('input[name=require_hearing]')) {
                 console.log('require_hearing');
             } else {
                 console.log('ERROR : require_hearing');
             }
 
             // * Visiual impairment: input[name=require_visiual] => checked
-            if (dom.queryselector('input[name=require_visiual]')) {
+            if (dom.querySelector('input[name=require_visiual]')) {
                 console.log('require_visiual');
             } else {
                 console.log('ERROR : require_visiual');
             }
 
             // * Isolation room: input[name=require_isolate] => checked
-            if (dom.queryselector('input[name=require_isolate]')) {
+            if (dom.querySelector('input[name=require_isolate]')) {
                 console.log('require_isolate');
             } else {
                 console.log('ERROR : require_isolate');
             }
 
             // * Special Requiremen other: textarea[name=require_other_text] => innerText
-            if (dom.queryselector('textarea[name=require_other_text]')) {
+            if (dom.querySelector('textarea[name=require_other_text]')) {
                 console.log('require_other_text');
             } else {
                 console.log('ERROR : require_other_text');
@@ -763,14 +763,14 @@
             }
 
             // * breathing: input[name=Room_type]=> value
-            if (dom.queryselector('input[name=Room_type]')) {
+            if (dom.querySelector('input[name=Room_type]')) {
                 console.log('Room_type');
             } else {
                 console.log('ERROR : Room_type');
             }
 
             // * o2_type: input[name=via]=> value
-            if (dom.queryselector('input[name=via]')) {
+            if (dom.querySelector('input[name=via]')) {
                 console.log('via');
             } else {
                 console.log('ERROR : via');
@@ -784,7 +784,7 @@
             }
 
             // * level of conscious: input[name=conscious]=> value
-            if (dom.queryselector('input[name=conscious]')) {
+            if (dom.querySelector('input[name=conscious]')) {
                 console.log('conscious');
             } else {
                 console.log('ERROR : conscious');
@@ -819,7 +819,7 @@
             }
 
             // * mental evaluation: input[name=mental]=> value
-            if (dom.queryselector('input[name=mental]')) {
+            if (dom.querySelector('input[name=mental]')) {
                 console.log('mental');
             } else {
                 console.log('ERROR : mental');
@@ -847,196 +847,196 @@
             }
 
             // * General appearance: textarea#general_app => innerText
-            if (dom.queryselector('#general_app')) {
+            if (dom.querySelector('#general_app')) {
                 console.log('general_app');
             } else {
                 console.log('ERROR : general_app');
             }
 
             // * exam skin: input[name=exam_skin][checked] => value
-            if (dom.queryselector('input[name=exam_skin]')) {
+            if (dom.querySelector('input[name=exam_skin]')) {
                 console.log('exam_skin');
             } else {
                 console.log('ERROR : exam_skin');
             }
 
             // * exam skin detail: textarea#exam_skin_detail => innerText
-            if (dom.queryselector('#exam_skin_detail')) {
+            if (dom.querySelector('#exam_skin_detail')) {
                 console.log('exam_skin_detail');
             } else {
                 console.log('ERROR : exam_skin_detail');
             }
 
             // * exam head face: input[name=exam_face][checked] => value
-            if (dom.queryselector('input[name=exam_face]')) {
+            if (dom.querySelector('input[name=exam_face]')) {
                 console.log('exam_face');
             } else {
                 console.log('ERROR : exam_face');
             }
 
             // * exam head face detail: textarea#exam_face_detail => innerText
-            if (dom.queryselector('#exam_face_detail')) {
+            if (dom.querySelector('#exam_face_detail')) {
                 console.log('exam_face_detail');
             } else {
                 console.log('ERROR : exam_face_detail');
             }
 
             // * exam eye ent: input[name=exam_eye][checked] => value
-            if (dom.queryselector('input[name=exam_eye]')) {
+            if (dom.querySelector('input[name=exam_eye]')) {
                 console.log('exam_eye');
             } else {
                 console.log('ERROR : exam_eye');
             }
 
             // * exam eye ent detail: textarea#exam_eye_detail => innerText
-            if (dom.queryselector('#exam_eye_detail')) {
+            if (dom.querySelector('#exam_eye_detail')) {
                 console.log('exam_eye_detail');
             } else {
                 console.log('ERROR : exam_eye_detail');
             }
 
             // * exam neck: input[name=exam_neck][checked] => value
-            if (dom.queryselector('input[name=exam_neck]')) {
+            if (dom.querySelector('input[name=exam_neck]')) {
                 console.log('exam_neck');
             } else {
                 console.log('ERROR : exam_neck');
             }
 
             // * exam neck detail: textarea#exam_neck_detail => innerText
-            if (dom.queryselector('#exam_neck_detail')) {
+            if (dom.querySelector('#exam_neck_detail')) {
                 console.log('exam_neck_detail');
             } else {
                 console.log('ERROR : exam_neck_detail');
             }
 
             // * exam heart: input[name=exam_heart][checked] => value
-            if (dom.queryselector('input[name=exam_heart]')) {
+            if (dom.querySelector('input[name=exam_heart]')) {
                 console.log('exam_heart');
             } else {
                 console.log('ERROR : exam_heart');
             }
 
             // * exam heart detail: textarea#exam_heart_detail => innerText
-            if (dom.queryselector('#exam_heart_detail')) {
+            if (dom.querySelector('#exam_heart_detail')) {
                 console.log('exam_heart_detail');
             } else {
                 console.log('ERROR : exam_heart_detail');
             }
 
             // * exam lungs: input[name=exam_lungs][checked] => value
-            if (dom.queryselector('input[name=exam_lungs]')) {
+            if (dom.querySelector('input[name=exam_lungs]')) {
                 console.log('exam_lungs');
             } else {
                 console.log('ERROR : exam_lungs');
             }
 
             // * exam lungs detail: textarea#exam_lungs_detail => innerText
-            if (dom.queryselector('#exam_lungs_detail')) {
+            if (dom.querySelector('#exam_lungs_detail')) {
                 console.log('exam_lungs_detail');
             } else {
                 console.log('ERROR : exam_lungs_detail');
             }
 
             // * exam abdomen: input[name=exam_abdomen][checked] => value
-            if (dom.queryselector('input[name=exam_abdomen]')) {
+            if (dom.querySelector('input[name=exam_abdomen]')) {
                 console.log('exam_abdomen');
             } else {
                 console.log('ERROR : exam_abdomen');
             }
 
             // * exam abdomen detail: textarea#exam_abdomen_detail => innerText
-            if (dom.queryselector('#exam_abdomen_detail')) {
+            if (dom.querySelector('#exam_abdomen_detail')) {
                 console.log('exam_abdomen_detail');
             } else {
                 console.log('ERROR : exam_abdomen_detail');
             }
 
             // * exam Extremities: input[name=exam_extrem][checked] => value
-            if (dom.queryselector('input[name=exam_extrem]')) {
+            if (dom.querySelector('input[name=exam_extrem]')) {
                 console.log('exam_extrem');
             } else {
                 console.log('ERROR : exam_extrem');
             }
 
             // * exam Extremities detail: textarea#exam_extremities_detail => innerText
-            if (dom.queryselector('#exam_extremities_detail')) {
+            if (dom.querySelector('#exam_extremities_detail')) {
                 console.log('exam_extremities_detail');
             } else {
                 console.log('ERROR : exam_extremities_detail');
             }
 
             // * exam Nervous system: input[name=exam_nerv][checked] => value
-            if (dom.queryselector('input[name=exam_nerv]')) {
+            if (dom.querySelector('input[name=exam_nerv]')) {
                 console.log('exam_nerv');
             } else {
                 console.log('ERROR : exam_nerv');
             }
 
             // * exam Nervous system detail: textarea#exam_nervous_detail => innerText
-            if (dom.queryselector('#exam_nervous_detail')) {
+            if (dom.querySelector('#exam_nervous_detail')) {
                 console.log('exam_nervous_detail');
             } else {
                 console.log('ERROR : exam_nervous_detail');
             }
 
             // * exam Lymph nodes: input[name=exam_lymph][checked] => value
-            if (dom.queryselector('input[name=exam_lymph]')) {
+            if (dom.querySelector('input[name=exam_lymph]')) {
                 console.log('exam_lymph');
             } else {
                 console.log('ERROR : exam_lymph');
             }
 
             // * exam Lymph nodes detail: textarea#exam_lymph_detail => innerText
-            if (dom.queryselector('#exam_lymph_detail')) {
+            if (dom.querySelector('#exam_lymph_detail')) {
                 console.log('exam_lymph_detail');
             } else {
                 console.log('ERROR : exam_lymph_detail');
             }
 
             // * exam breasts: input[name=exam_breasts][checked] => value
-            if (dom.queryselector('input[name=exam_breasts]')) {
+            if (dom.querySelector('input[name=exam_breasts]')) {
                 console.log('exam_breasts');
             } else {
                 console.log('ERROR : exam_breasts');
             }
 
             // * exam breasts detail: textarea#exam_breasts_detail => innerText
-            if (dom.queryselector('#exam_breasts_detail')) {
+            if (dom.querySelector('#exam_breasts_detail')) {
                 console.log('exam_breasts_detail');
             } else {
                 console.log('ERROR : exam_breasts_detail');
             }
 
             // * exam genitalia: input[name=exam_genitalia][checked] => value
-            if (dom.queryselector('input[name=exam_genitalia]')) {
+            if (dom.querySelector('input[name=exam_genitalia]')) {
                 console.log('exam_genitalia');
             } else {
                 console.log('ERROR : exam_genitalia');
             }
 
             // * exam genitalia detail: textarea#exam_genitalia_detail => innerText
-            if (dom.queryselector('#exam_genitalia_detail')) {
+            if (dom.querySelector('#exam_genitalia_detail')) {
                 console.log('exam_genitalia_detail');
             } else {
                 console.log('ERROR : exam_genitalia_detail');
             }
 
             // * exam rectal: input[name=exam_rectal][checked] => value
-            if (dom.queryselector('input[name=exam_rectal]')) {
+            if (dom.querySelector('input[name=exam_rectal]')) {
                 console.log('exam_rectal');
             } else {
                 console.log('ERROR : exam_rectal');
             }
 
             // * exam rectal detail: textarea#exam_rectal_detail => innerText
-            if (dom.queryselector('#exam_rectal_detail')) {
+            if (dom.querySelector('#exam_rectal_detail')) {
                 console.log('exam_rectal_detail');
             } else {
                 console.log('ERROR : exam_rectal_detail');
             }
 
             // * Pertinent investigation: textarea#pertinent => innerText
-            if (dom.queryselector('#pertinent')) {
+            if (dom.querySelector('#pertinent')) {
                 console.log('pertinent');
             } else {
                 console.log('ERROR : pertinent');
@@ -1106,7 +1106,7 @@
             }
 
             // * can estimate los: input[name=estimated] => checked
-            if (dom.queryselector('input[name=estimated]')) {
+            if (dom.querySelector('input[name=estimated]')) {
                 console.log('estimated');
             } else {
                 console.log('ERROR : estimated');
