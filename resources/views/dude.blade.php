@@ -33,7 +33,7 @@
         function duDudeSync(id) {
             request.open('POST', `/call-dude/${id}`, false);
             form = new FormData();
-            form.append('_totken', document.querySelector('input[name=_token]').value);
+            form.append('_token', document.querySelector('input[name=_token]').value);
             request.send(form);
             if (request.status !== 200) {
                 return;
@@ -47,18 +47,97 @@
         function extractDude() {
             let data = new FormData();
 
+            // * AN: value => input#AN
+            if (document.querySelector('input#AN')) {
+                console.log('input#AN');
+            } else {
+                console.log('ERROR : input#AN');
+            }
+
+            // * HN: value => input#HN
+            if (document.querySelector('input#HN')) {
+                console.log('input#HN');
+            } else {
+                console.log('ERROR : input#HN');
+            }
+
+            // * pname: value => input#pname
+            if (document.querySelector('input#pname')) {
+                console.log('input#pname');
+            } else {
+                console.log('ERROR : input#pname');
+            }
+
+            // * gender: value => input[name=sex]
+            if (document.querySelector('input[name=sex]')) {
+                console.log('input[name=sex]');
+            } else {
+                console.log('ERROR : input[name=sex]');
+            }
+
+            // * Age: value => input#Age
+            if (document.querySelector('input#Age')) {
+                console.log('input#Age');
+            } else {
+                console.log('ERROR : input#Age');
+            }
+
+            // * attending: option => select[name=staff]
+            if (document.querySelector('select[name=staff]')) {
+                console.log('select[name=staff]');
+            } else {
+                console.log('ERROR : select[name=staff]');
+            }
+
+            // * author_pln: value => input[name=dent_code]
+            if (document.querySelector('input[name=dent_code]')) {
+                console.log('input[name=dent_code]');
+            } else {
+                console.log('ERROR : input[name=dent_code]');
+            }
+
+            // * author_title: value => input[name=dent_pos]
+            if (document.querySelector('input[name=dent_pos]')) {
+                console.log('input[name=dent_pos]');
+            } else {
+                console.log('ERROR : input[name=dent_pos]');
+            }
+
+            // * author_fname: value => input[name=dent_name]
+            if (document.querySelector('input[name=dent_name]')) {
+                console.log('input[name=dent_name]');
+            } else {
+                console.log('ERROR : input[name=dent_name]');
+            }
+
+            // * author_lname: value => input[name=dent_sure]
+            if (document.querySelector('input[name=dent_sure]')) {
+                console.log('input[name=dent_sure]');
+            } else {
+                console.log('ERROR : input[name=dent_sure]');
+            }
+
+            // * date_admit: value => input[name=Admit_Date]
+            if (document.querySelector('input[name=Admit_Date]')) {
+                console.log('input[name=Admit_Date]');
+            } else {
+                console.log('ERROR : input[name=Admit_Date]');
+            }
+
             // * Chief complaint: textarea #CC => innerText
             if (dom.querySelector('#CC')) {
                 console.log('Chief complaint');
             } else {
                 console.log('ERROR : Chief complaint')
             }
+
             // * Admit reason: input[name = reason][checked] => value
             if (dom.querySelector('input[name=reason]')) {
                 console.log('Admit reason');
             } else {
                 console.log('ERROR : Admit reason')
             }
+
             // * History of present illness: textarea #present => innerText
             if (dom.querySelector('#present')) {
                 console.log('History of present illness');
@@ -347,6 +426,12 @@
             }
 
             // * alcohol amount: input#alcohol_amount => value
+            if (dom.querySelector('#alcohol_amount')) {
+                console.log('alcohol_amount');
+            } else {
+                console.log('ERROR : alcohol_amount');
+            }
+
             // * smoking: input[name=smoking][checked] => value
             if (dom.querySelector('input[name=smoking]')) {
                 console.log('smoking');
@@ -389,8 +474,6 @@
                 console.log('ERROR : Allergy_detail');
             }
 
-
-            Family
             // * no current medications: input#current_med => checked
             if (dom.querySelector('#current_med')) {
                 console.log('current_med');
@@ -615,7 +698,6 @@
                 console.log('ERROR : require_other_text');
             }
 
-            Investigation
             // * temperature: input#vital_T => value
             if (dom.querySelector('#vital_T')) {
                 console.log('vital_T');
@@ -959,8 +1041,6 @@
                 console.log('ERROR : pertinent');
             }
 
-
-            Plan
             // * Problem list: textarea#problem => innerText
             if (dom.querySelector('#problem')) {
                 console.log('problem');
