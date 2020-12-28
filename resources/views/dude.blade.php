@@ -83,11 +83,11 @@
                 console.log('ERROR : input#Age');
             }
 
-            // * attending: option => select[name=staff]
-            if (dom.querySelector('select[name=staff]')) {
-                // console.log('select[name=staff]');
+            // * attending: option => select[name=Staff]
+            if (dom.querySelector('select[name=Staff]')) {
+                // console.log('select[name=Staff]');
             } else {
-                console.log('ERROR : select[name=staff]');
+                console.log('ERROR : select[name=Staff]');
             }
 
             // * author_pln: value => input[name=dent_code]
@@ -153,15 +153,15 @@
                 console.log('ERROR : Past history')
             }
 
-            // * Women: input #forwomen => checked
-            if (dom.querySelector('#forwomen')) {
+            // * Women: input #forwoman => checked
+            if (dom.querySelector('#forwoman')) {
                 // console.log('Women');
             } else {
                 console.log('ERROR : Women')
             }
 
-            // * Pregnancy: input[name = women][checked] => value
-            if (dom.querySelector('input[name=women]')) {
+            // * Pregnancy: input[name = woman][checked] => value
+            if (dom.querySelector('input[name=woman]')) {
                 // console.log('Pregnancy');
             } else {
                 console.log('ERROR : Pregnancy')
@@ -637,7 +637,7 @@
             }
 
             // * review other detail: textarea[name=review_other_text] => innerText
-            if (dom.querySelector('input[name=review_other_text]')) {
+            if (dom.querySelector('textarea[name=review_other_text]')) {
                 // console.log('review_other_text');
             } else {
                 console.log('ERROR : review_other_text');
