@@ -40,7 +40,7 @@
             form = new FormData();
             form.append('_token', document.querySelector('input[name=_token]').value);
             request.send(form);
-            if (request.status !== 200) {
+            if (request.status !== 200 || request.responseText === '') {
                 return;
             }
             dom.innerHTML = request.responseText;

@@ -36,7 +36,7 @@ Route::post('/call-dude/{form}/{id}', function ($form, $id) {
             'status' => 'failed',
         ]);
 
-        return null;
+        return '';
     }
 
     $body = $response->body();
@@ -58,7 +58,7 @@ Route::post('/call-dude/{form}/{id}', function ($form, $id) {
     ]);
 
     if ($noData) {
-        return null;
+        return '';
     }
 
     $begin = strpos($body, '<body>') + 6;
