@@ -369,6 +369,8 @@
             data.append('can_estimate_los', extractValue(dom, 'input[name=estimated]', 'checked'));
             // * estimated los: input#length_stay => value
             data.append('estimated los', extractValue(dom, '#length_stay', 'value'));
+            // * completed : input[name=Note_Complete] => checked
+            data.append('completed', extractValue(dom, 'input[name=Note_Complete]', 'checked'));
             return data;
         }
 
