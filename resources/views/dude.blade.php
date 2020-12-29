@@ -20,19 +20,23 @@
     <script>
         var request = new XMLHttpRequest();
         var form = null;
+        var item = null;
+        var data = null;
         var dom = document.createElement("body");
         var feedback = document.getElementById('feedback');
+        var deads = ['Natural', 'Accident', 'Suicide', 'Homicide', 'During investigations', 'Unspecified'];
 
         function runDudeSync(start, stop) {
             for (start; start < stop; start++) {
                 feedback.innerHTML = start;
-                duDudeSync(start);
+                duDudeSync('admit', start);
+                duDudeSync('discharge', start);
             }
             feedback.innerHTML = 'done';
         }
 
-        function duDudeSync(id) {
-            request.open('POST', `/call-dude/${id}`, false);
+        function duDudeSync(formName, id) {
+            request.open('POST', `/call-dude/${formName}/${id}`, false);
             form = new FormData();
             form.append('_token', document.querySelector('input[name=_token]').value);
             request.send(form);
@@ -40,29 +44,24 @@
                 return;
             }
             dom.innerHTML = request.responseText;
-            form = extractDude();
-            // request.open('POST', `/dudes/admit/${id}`, false);
-            // request.send(form);
+            form = formName === 'admit' ? extractDudeAdmit() : extractDudeDischarge();
+            request.open('POST', `/dudes/${formName}/${id}`, false);
+            request.send(form);
         }
 
-        function extractDude() {
-            let data = new FormData();
+        function extractDudeAdmit() {
+            data = new FormData();
 
             // * AN: value => input#AN
             data.append('AN', extractValue(dom, 'input#AN', 'value'));
-
             // * HN: value => input#HN
             data.append('HN', extractValue(dom, 'input#HN', 'value'));
-
             // * pname: value => input#pname
             data.append('pname', extractValue(dom, 'input#pname', 'value'));
-
             // * gender: value => input[name=sex]
             data.append('sex', extractValue(dom, 'input[name=sex]', 'value'));
-
             // * Age: value => input#Age
             data.append('Age', extractValue(dom, 'input#Age', 'value'));
-
             // * attending: option => select[name=Staff]
             item = extractValue(dom, 'select[name=Staff]', 'innerHTML', true);
             if (item) {
@@ -72,7 +71,6 @@
                 data.append('attending_staff', null);
                 data.append('attending_staff_division', null);
             }
-
             // * author_pln: value => input[name=dent_code]
             data.append('dent_code', extractValue(dom, 'input[name=dent_code]', 'value'));
             // * author_title: value => input[name=dent_pos]
@@ -371,6 +369,89 @@
             data.append('can_estimate_los', extractValue(dom, 'input[name=estimated]', 'checked'));
             // * estimated los: input#length_stay => value
             data.append('estimated los', extractValue(dom, '#length_stay', 'value'));
+            return data;
+        }
+
+        function extractDudeDischarge() {
+            data = new FormData();
+            item = null;
+
+            data.append('an', extractValue(dom, '#AN', 'value'));
+            data.append('hn', extractValue(dom, '#HN', 'value'));
+            data.append('patient_name', extractValue(dom, '#pname', 'value'));
+            data.append('patient_age', extractValue(dom, '#Age', 'value'));
+            data.append('encountered_at', extractValue(dom, '#Admit_Date', 'value'));
+            data.append('discharged_at', extractValue(dom, '#Discharge_Date', 'value'));
+            data.append('length_of_stay', extractValue(dom, '#inhospital', 'value'));
+
+            // ward
+            data.append('ward', extractValue(dom, '#MD_Ward', 'innerText', true));
+
+            // attending
+            item = extractValue(dom, '#AttendingStaff', 'innerHTML', true);
+            if (item) {
+                data.append('attending_staff', item.split(' | ')[0]);
+                data.append('attending_staff_division', item.split(' | ')[1]);
+            } else {
+                data.append('attending_staff', null);
+                data.append('attending_staff_division', null);
+            }
+
+            // author
+            item = extractValue(dom, '#Resident', 'innerHTML', true);
+            if (item) {
+                data.append('author', item.split(' | ')[1]);
+                data.append('author_pln', item.split(' | ')[0]);
+            } else {
+                data.append('author', null);
+                data.append('author_pln', null);
+            }
+
+            // division
+            let division = extractValue(dom, 'select[name=division1]', 'innerText', true);
+            data.append('primary_division', division ? division.split(' | ')[1] : null);
+            division = extractValue(dom, 'select[name=division2]', 'innerText', true);
+            data.append('secondary_division', division ? division.split(' | ')[1] : null);
+
+            data.append('principal_diagnosis', extractValue(dom, '#PrincipalDx', 'innerText'));
+            data.append('admit_reason', extractValue(dom, '#ReasonForAdmission', 'innerText'));
+            data.append('comorbids', extractValue(dom, '#Comorbids', 'innerText'));
+            data.append('complications', extractValue(dom, '#Complication', 'innerText'));
+            data.append('external_cause', extractValue(dom, '#Extcause', 'innerText'));
+            data.append('other_diagnosis', extractValue(dom, '#OtherDiag', 'innerText'));
+            data.append('OR_procedures', extractValue(dom, '#OrProcedure', 'innerText'));
+            data.append('non_OR_Procedures', extractValue(dom, '#NonOrProcedure', 'innerText'));
+            data.append('chief_complaint', extractValue(dom, '#CheifComplaint', 'innerText'));
+            data.append('significant_findings', extractValue(dom, '#SignFinding', 'innerText'));
+            data.append('significant_procedures', extractValue(dom, '#SignProcedure', 'innerText'));
+            data.append('hospital_course', extractValue(dom, '#Hosp', 'innerText'));
+            data.append('condition_upon_discharge', extractValue(dom, '#DC', 'innerText'));
+            data.append('follow_up_instruction', extractValue(dom, '#FollowInstruction', 'innerText'));
+
+            // discharge
+            let discharge = extractValue(dom, '#ds', 'innerText', true);
+            data.append('discharge_status', discharge || null);
+            discharge = extractValue(dom, '#dt', 'innerText', true);
+            data.append('discharge_type', discharge || null);
+
+            data.append('significant_medications', extractValue(dom, 'WardRx', 'innerText'));
+            data.append('home_medications', extractValue(dom, 'HomeRx', 'innerText'));
+            data.append('interesting_case', extractValue(dom, '#InterestingCase', 'checked'));
+            data.append('completed', extractValue(dom, '#Complete', 'checked'));
+
+            if (data.discharge_status === 'DEAD') {
+                data.append('dead_report_charecter_of_death', extractValue(dom, 'input[name=COD][checked]', 'value'));
+                if (data.dead_report_charecter_of_death) {
+                    data.append('dead_report_charecter_of_death', deads[parseInt(data.dead_report_charecter_of_death) -
+                        1]);
+                }
+                data.append('dead_report_cause_of_dead_a', extractValue(dom, '#LeadingtoDeath', 'innerText'));
+                data.append('dead_report_cause_of_dead_b', extractValue(dom, '#Dueto1', 'innerText'));
+                data.append('dead_report_cause_of_dead_c', extractValue(dom, '#Dueto2', 'innerText'));
+                data.append('dead_report_cause_of_dead_d', extractValue(dom, '#Dueto3', 'innerText'));
+                data.append('dead_report_other_significant_conditions', extractValue(dom, '#OtherSign', 'innerText'));
+            }
+
             return data;
         }
 

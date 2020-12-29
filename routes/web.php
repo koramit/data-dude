@@ -26,21 +26,39 @@ Route::get('/dude', function () {
     return view('dude');
 });
 
-Route::post('/call-dude/{id}', function ($id) {
-    $response = Http::get(env('TARGET_URL').$id);
-    // $response = Http::get('https://pantip.com/topic/40389455');
+Route::post('/call-dude/{form}/{id}', function ($form, $id) {
+    $response = Http::get(env('TARGET_URL_'.$form).$id);
+
     if (! $response->ok()) {
-        // Dude::create([
-        //     'key' => $id,
-        //     'target' => 'admit',
-        //     'body' => 'failed',
-        // ]);
-        return 'failed';
+        Dude::create([
+            'key' => $id,
+            'form' => $form,
+            'status' => 'failed',
+        ]);
+
+        return null;
     }
 
     $body = $response->body();
-    if (strpos($body, "<body>\r\n\r\n\r\n</body>") !== false) {
-        return 'no data';
+    $noData = false;
+    if ($form == 'admit') {
+        if (strpos($body, "<body>\r\n\r\n\r\n</body>") !== false) {
+            $noData = true;
+        }
+    } else {
+        if (strpos($body, '/body') < 12000) {
+            $noData = true;
+        }
+    }
+
+    Dude::create([
+        'key' => $id,
+        'form' => $form,
+        'status' => $noData ? 'no data' : 'ok',
+    ]);
+
+    if ($noData) {
+        return null;
     }
 
     $begin = strpos($body, '<body>') + 6;
