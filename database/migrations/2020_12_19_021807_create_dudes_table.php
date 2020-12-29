@@ -16,8 +16,8 @@ class CreateDudesTable extends Migration
         Schema::create('dudes', function (Blueprint $table) {
             $table->id();
             $table->string('key');
-            $table->string('target');
-            $table->string('body');
+            $table->string('form');
+            $table->string('status');
             $table->timestamps();
         });
     }

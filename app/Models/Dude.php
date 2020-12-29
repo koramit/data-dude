@@ -9,5 +9,5 @@ class Dude extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['key', 'target', 'body'];
+    protected $fillable = ['key', 'form', 'status'];
 }
