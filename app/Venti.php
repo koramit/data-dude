@@ -56,6 +56,12 @@ class Venti
             $p++;
         }
 
-        \Log::info($patients);
+        // \Log::info($patients);
+        $lastlist = collect($patients)->pluck('hn')->toArray();
+        if (\Cache::has('lastlist')) {
+            \Log::info();
+        } else {
+            \Cache::put('lastlist', $lastlist);
+        }
     }
 }
