@@ -69,7 +69,9 @@ Route::post('/call-dude/{form}/{id}', function ($form, $id) {
 });
 
 Route::post('/dudes/venti', function () {
-    \Log::info(request()->all());
+    // \Log::info(request()->all());
+
+    App\Venti::itnev(request()->p_tags, request()->span_tags);
 
     return ['foo' => 'bar'];
 });
