@@ -81,3 +81,7 @@ Route::post('/dudes/{form}/{key}', function ($form, $key) {
     // Log::info(Request::all());
     return 'ok';
 });
+
+Route::get('/venti/{id}', function ($id) {
+    return App\Models\VentiRecord::find($id);
+});
