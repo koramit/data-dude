@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Models\VentiRecord;
+
 class Venti
 {
     public static function itnev($ps, $spans)
@@ -56,12 +58,32 @@ class Venti
             $p++;
         }
 
-        // \Log::info($patients);
-        $lastlist = collect($patients)->pluck('hn')->toArray();
-        if (\Cache::has('lastlist')) {
-            \Log::info();
-        } else {
-            \Cache::put('lastlist', $lastlist);
+        foreach ($patients as $patient) {
+            // if no hn in DB or hn discharged then create new case
+            $case = VentiRecord::whereHn($patient['hn'])
+                               ->whereNotNull('dismissed_at')
+                               ->first();
+            $los = explode(':', $patient['los']);
+            unset($patient['los']);
+            if (! $case) {
+                // create case
+                $case = VentiRecord::create($patient);
+                $minutes = (((int) $los[0]) ?? 0) * 60;
+                $minutes += (((int) $los[1]) ?? 0);
+                $case->encountered_at = now()->addMinutes($minutes);
+                $case->save();
+            } else {
+                // else update case
+                $case->update($patient);
+            }
         }
+
+        // \Log::info($patients);
+        // $lastlist = collect($patients)->pluck('hn')->toArray();
+        // if (\Cache::has('lastlist')) {
+        //     \Log::info();
+        // } else {
+        //     \Cache::put('lastlist', $lastlist);
+        // }
     }
 }
