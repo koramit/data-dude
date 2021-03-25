@@ -8,9 +8,9 @@ class Venti
     {
         $patients = [];
 
-        $countP = count($spans) - 1;
+        $countTags = count($spans) - 1;
         $i = 0;
-        while ($i < $countP) {
+        while ($i < $countTags) {
             if (is_numeric($spans[$i])) {
                 $patients[] = [
                     'bed' => $spans[$i],
@@ -26,7 +26,34 @@ class Venti
                 ];
                 $i += 3;
             }
-            // \Log::debug($i);
+        }
+
+        $countTags = count($ps) - 1;
+        $i = 0;
+        $p = 0;
+        while ($i < $countTags) {
+            if ($ps[$i] == 'M') {
+                $patients[$p] += [
+                    'medicine' => true,
+                    'recheck' => $ps[$i + 1],
+                    'dx' => $ps[$i + 2],
+                    'counter' => $ps[$i + 3],
+                    'los' => $ps[$i + 4],
+                    'remark' => $ps[$i + 5],
+                ];
+                $i += 6;
+            } else {
+                $patients[$p] += [
+                    'medicine' => false,
+                    'recheck' => $ps[$i],
+                    'dx' => $ps[$i + 1],
+                    'counter' => $ps[$i + 2],
+                    'los' => $ps[$i + 3],
+                    'remark' => $ps[$i + 4],
+                ];
+                $i += 5;
+            }
+            $p++;
         }
 
         \Log::info($patients);
