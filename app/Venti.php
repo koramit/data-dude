@@ -8,13 +8,13 @@ class Venti
     {
         $patients = [];
 
-        $countP = count($span);
+        $countP = count($spans);
         $i = 0;
         while ($i < $countP) {
             $patients[] = [
-                'bed' => $span[$i],
-                'hn' => str_replace('HN', '', $span[$i + 2]),
-                'name' => $span[$i + 1],
+                'bed' => $spans[$i],
+                'hn' => str_replace('HN', '', $spans[$i + 2]),
+                'name' => $spans[$i + 1],
             ];
             $i += 4;
         }
