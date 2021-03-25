@@ -68,6 +68,10 @@ Route::post('/call-dude/{form}/{id}', function ($form, $id) {
     return iconv('cp874', 'utf-8//IGNORE', $body);
 });
 
+Route::post('/dudes/venti', function () {
+    return ['foo' => 'bar'];
+});
+
 Route::post('/dudes/{form}/{key}', function ($form, $key) {
     DudeForm::create(['key' => $key, 'form' => $form, 'content' => Request::all()]);
     // Log::info(Request::all());
