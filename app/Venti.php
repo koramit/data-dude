@@ -61,7 +61,7 @@ class Venti
         foreach ($patients as $patient) {
             // if no hn in DB or hn discharged then create new case
             $case = VentiRecord::whereHn($patient['hn'])
-                               ->whereNotNull('dismissed_at')
+                               ->whereNull('dismissed_at')
                                ->first();
             $los = explode(':', $patient['los']);
             unset($patient['los']);
