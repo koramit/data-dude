@@ -8,7 +8,7 @@ class Venti
     {
         $patients = [];
 
-        $countP = count($spans);
+        $countP = count($spans) - 1;
         $i = 0;
         while ($i < $countP) {
             $patients[] = [
