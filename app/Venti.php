@@ -38,20 +38,20 @@ class Venti
                 $patients[$p] += [
                     'medicine' => true,
                     'recheck' => $ps[$i + 1],
-                    'dx' => $ps[$i + 2],
+                    'dx' => str_replace("\n", '', $ps[$i + 2]),
                     'counter' => $ps[$i + 3],
                     'los' => $ps[$i + 4],
-                    'remark' => $ps[$i + 5],
+                    'remark' => str_replace("\n", '', $ps[$i + 5]),
                 ];
                 $i += 6;
             } else {
                 $patients[$p] += [
                     'medicine' => false,
                     'recheck' => $ps[$i],
-                    'dx' => $ps[$i + 1],
+                    'dx' => str_replace("\n", '', $ps[$i + 1]),
                     'counter' => $ps[$i + 2],
                     'los' => $ps[$i + 3],
-                    'remark' => $ps[$i + 4],
+                    'remark' => str_replace("\n", '', $ps[$i + 4]),
                 ];
                 $i += 5;
             }
