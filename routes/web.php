@@ -69,6 +69,8 @@ Route::post('/call-dude/{form}/{id}', function ($form, $id) {
 });
 
 Route::post('/dudes/venti', function () {
+    \Log::info(request()->all());
+
     return ['foo' => 'bar'];
 });
 
