@@ -1,5 +1,3 @@
-const { trim } = require("lodash");
-
 const newnev = function () {
     let list = document.querySelector('div.item-list');
     let items = [...list.querySelectorAll('div.item')];
@@ -36,11 +34,11 @@ const newnev = function () {
 
         // [los] p.time  | **ALL**
         let los = node.querySelector('p.time');
-        patient.los =  (los && los !== undefined) ? los.textContenttrim() : null;
+        patient.los =  (los && los !== undefined) ? los.textContent.trim() : null;
 
         // [remark] div.round-rect > p   | **ALL**
         let remark = node.querySelector('div.round-rect > p');
-        patient.remark =  (remark && remark !== undefined) ? remark.textContenttrim() : null;
+        patient.remark =  (remark && remark !== undefined) ? remark.textContent.trim() : null;
 
         if (! patient.medicine && patient.counter == 'C4') {
             patient.medicine = true;

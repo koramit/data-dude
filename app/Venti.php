@@ -76,8 +76,10 @@ class Venti
         $dismissedCases = [];
         collect($latestlist)->diff($list)->each(function ($hn) use ($dismissedCases) {
             $case = VentiRecord::whereHn($hn)->whereNull('dismissed_at')->first();
-            $case->update(['dismissed_at' => now()]);
-            $dismissedCases[] = $case;
+            if ($case) {
+                $case->update(['dismissed_at' => now()]);
+                $dismissedCases[] = $case;
+            } // sometime case may lose if not fetch for too long
         });
 
         Cache::put('latestlist', $list);
