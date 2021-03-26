@@ -4,7 +4,7 @@ const itnev = function () {
     let pTags = [...list.querySelectorAll('p')].map(node => node.textContent);
     fetch('http://172.21.106.10:7070/dudes/venti', {
         method: 'post',
-        headers: headers,
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
         body: JSON.stringify({"p_tags":pTags, "span_tags":spanTags}) })
     .then(response => response.json())
     .then(data => console.log(data))

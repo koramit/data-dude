@@ -74,7 +74,7 @@ class Venti
                 $encounteredAt = now()->addMinutes($minutes);
                 $patient += [
                     'no' => $encounteredAt->format('ymdHi').$patient['hn'],
-                    'encountered_ay' => $encounteredAt,
+                    'encountered_at' => $encounteredAt,
                 ];
                 // $case->encountered_at = $encounteredAt;
                 // $case->no = $encounteredAt->format('ymdHi') . $patient['hn'];
