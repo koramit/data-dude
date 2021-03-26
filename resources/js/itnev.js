@@ -1,6 +1,5 @@
 const itnev = function () {
-    document.querySelector('.navbar > div:nth-child(2) > a:nth-child(1)').click();
-    setTimeout(() => {
+    const task = function () {
         let list = document.querySelector('div.item-list');
         let spanTags = [...list.querySelectorAll('span')].map(node => node.textContent);
         let pTags = [...list.querySelectorAll('p')].map(node => node.textContent);
@@ -10,7 +9,13 @@ const itnev = function () {
             body: JSON.stringify({"p_tags":pTags, "span_tags":spanTags}) })
         .then(response => response.json())
         .then(data => console.log(data));
-    }, 500);
+    }
+    if (window.location.path != '/er-queue') {
+        document.querySelector('.navbar > div:nth-child(2) > a:nth-child(1)').click();
+        setTimeout(() => task(), 500);
+    } else {
+        task();
+    }
 }
 
 const switchPage = function () {
