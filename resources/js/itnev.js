@@ -1,7 +1,5 @@
 const itnev = function () {
-    if (window.location.pathname != '/er-queue') {
-        document.querySelector('.navbar > div:nth-child(2) > a:nth-child(1)').click();
-    }
+    document.querySelector('.navbar > div:nth-child(2) > a:nth-child(1)').click();
     let list = document.querySelector('div.item-list');
     let spanTags = [...list.querySelectorAll('span')].map(node => node.textContent);
     let pTags = [...list.querySelectorAll('p')].map(node => node.textContent);

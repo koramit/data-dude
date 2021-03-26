@@ -68,6 +68,7 @@ class Venti
             $case = VentiRecord::whereHn($patient['hn'])
                                ->whereNull('dismissed_at')
                                ->first();
+            Log::debug($patient);
             $los = explode(':', $patient['los']);
             unset($patient['los']);
             if (! $case) {
@@ -116,7 +117,7 @@ class Venti
                 }
             }
 
-            Log::debug($case);
+            // Log::debug($case);
 
             // if ($case->medicine) {
             //     $medicineCases[] = $case;
