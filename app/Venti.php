@@ -34,6 +34,8 @@ class Venti
         }
 
         $spanPatientsCount = count($patients);
+        Log::debug('parse p');
+        Log::debug($patients);
 
         $countTags = count($ps) - 1;
         $i = 0;
@@ -62,9 +64,9 @@ class Venti
                 $i += 5;
             }
             $p++;
-            if ($p >= $spanPatientsCount) {
-                break;
-            }
+            // if ($p >= $spanPatientsCount) {
+            //     break;
+            // }
         }
 
         $medicineCases = [];
