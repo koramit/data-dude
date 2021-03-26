@@ -5,6 +5,7 @@ namespace App;
 use App\Models\VentiRecord;
 use Exception;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class Venti
 {
@@ -81,8 +82,8 @@ class Venti
                 try {
                     $case = VentiRecord::create($patient);
                 } catch (Exception $e) {
-                    \Log::error('create case error');
-                    \Log::error($patient);
+                    Log::error('create case error');
+                    Log::error($patient);
                 }
             } else {
                 // update case
@@ -91,6 +92,12 @@ class Venti
                     if ($case->$key != $value) {
                         $case->$key = $value;
                         $updates = true;
+                        if ($key == 'dx') {
+                            Log::info('event dx change');
+                        }
+                        if ($key == 'medicine' && $value) {
+                            Log::info('event case tagged med');
+                        }
                     }
                 }
                 try {
@@ -98,8 +105,8 @@ class Venti
                         $case->save();
                     }
                 } catch (Exception $e) {
-                    \Log::error('update case error');
-                    \Log::error($patient);
+                    Log::error('update case error');
+                    Log::error($patient);
                 }
             }
 
@@ -118,13 +125,6 @@ class Venti
         });
 
         Cache::put('latestlist', $list);
-        \Log::info(collect($dismissedCases)->pluck(['hn', 'dismissed_at']));
-        // \Log::info($patients);
-        // $lastlist = collect($patients)->pluck('hn')->toArray();
-        // if (\Cache::has('lastlist')) {
-        //     \Log::info();
-        // } else {
-        //     \Cache::put('lastlist', $lastlist);
-        // }
+        Log::info(collect($dismissedCases)->pluck(['hn', 'dismissed_at']));
     }
 }
