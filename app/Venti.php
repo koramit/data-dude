@@ -125,6 +125,8 @@ class Venti
         });
 
         Cache::put('latestlist', $list);
-        Log::info(collect($dismissedCases)->pluck(['hn', 'dismissed_at']));
+        if (count($dismissedCases)) {
+            Log::info(collect($dismissedCases)->pluck(['hn', 'dismissed_at']));
+        }
     }
 }
