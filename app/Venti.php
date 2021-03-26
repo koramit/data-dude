@@ -116,9 +116,11 @@ class Venti
                 }
             }
 
-            if ($case->medicine) {
-                $medicineCases[] = $case;
-            }
+            Log::debug($case);
+
+            // if ($case->medicine) {
+            //     $medicineCases[] = $case;
+            // }
         }
 
         $latestlist = Cache::get('latestlist', []);
