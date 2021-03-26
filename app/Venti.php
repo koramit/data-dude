@@ -34,8 +34,8 @@ class Venti
         }
 
         $spanPatientsCount = count($patients);
-        Log::debug('parse p');
-        Log::debug($patients);
+        // Log::debug('parse p');
+        // Log::debug($patients);
 
         $countTags = count($ps) - 1;
         $i = 0;
@@ -63,6 +63,7 @@ class Venti
                 ];
                 $i += 5;
             }
+            Log::debug($patients[$p]);
             $p++;
             // if ($p >= $spanPatientsCount) {
             //     break;
