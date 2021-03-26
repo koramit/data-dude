@@ -33,9 +33,6 @@ class Venti
             }
         }
 
-        Log::info('P tags');
-        Log::info($ps);
-
         $countTags = count($ps) - 1;
         $i = 0;
         $p = 0;
@@ -71,7 +68,6 @@ class Venti
             $case = VentiRecord::whereHn($patient['hn'])
                                ->whereNull('dismissed_at')
                                ->first();
-            // Log::debug($patient);
             $los = explode(':', $patient['los']);
             unset($patient['los']);
             if (! $case) {
@@ -94,6 +90,7 @@ class Venti
                     Log::error('create case error');
                     Log::error($patient);
                 }
+                $case->needSync = true;
             } else {
                 // update case
                 $updates = false;
@@ -114,17 +111,16 @@ class Venti
                     if ($updates) {
                         $case->save();
                     }
+                    $case->needSync = true;
                 } catch (Exception $e) {
                     Log::error('update case error');
                     Log::error($patient);
                 }
             }
 
-            // Log::debug($case);
-
-            // if ($case->medicine) {
-            //     $medicineCases[] = $case;
-            // }
+            if ($case->medicine) {
+                $medicineCases[] = $case;
+            }
         }
 
         $latestlist = Cache::get('latestlist', []);
@@ -139,6 +135,12 @@ class Venti
         Cache::put('latestlist', $list);
         if (count($dismissedCases)) {
             Log::info(collect($dismissedCases)->pluck(['hn', 'dismissed_at']));
+        }
+
+        foreach ($medicineCases as $case) {
+            if ($case->needSync) {
+                Log::info('Need Sync : '.$case->no);
+            }
         }
     }
 }
