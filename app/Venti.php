@@ -16,7 +16,7 @@ class Venti
         $countTags = count($spans) - 1;
         $i = 0;
         while ($i < $countTags) {
-            if (is_numeric($spans[$i])) {
+            if (is_numeric($spans[$i]) || $spans[$i] == '-' || (strlen($spans[$i]) <= 6)) {
                 $patients[] = [
                     'bed' => $spans[$i],
                     'hn' => str_replace('HN', '', $spans[$i + 2]),
