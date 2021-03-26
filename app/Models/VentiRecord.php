@@ -14,5 +14,6 @@ class VentiRecord extends Model
     protected $casts = [
         'encountered_at' => 'datetime',
         'dismissed_at' => 'datetime',
+        'tagged_med_at' => 'datetime',
     ];
 }

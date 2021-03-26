@@ -18,14 +18,15 @@ class CreateVentiRecordsTable extends Migration
             $table->string('no', 20)->index()->nullable();
             $table->string('bed', 20)->nullable();
             $table->string('hn', 20)->index()->nullable();
-            $table->string('name')->nullable();
-            $table->boolean('medicine');
+            $table->string('name')->index()->nullable();
+            $table->boolean('medicine')->index();
             $table->string('recheck')->nullable();
-            $table->string('dx')->nullable();
-            $table->string('counter', 20)->nullable();
+            $table->string('dx')->index()->nullable();
+            $table->string('counter', 20)->index()->nullable();
             $table->string('remark')->nullable();
-            $table->timestamp('encountered_at')->nullable();
-            $table->timestamp('dismissed_at')->nullable();
+            $table->timestamp('encountered_at')->index()->nullable();
+            $table->timestamp('dismissed_at')->index()->nullable();
+            $table->timestamp('tagged_med_at')->index()->nullable();
             $table->timestamps();
         });
     }

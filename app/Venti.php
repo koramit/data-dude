@@ -79,6 +79,11 @@ class Venti
                     'no' => $encounteredAt->format('ymdHi').$patient['hn'],
                     'encountered_at' => $encounteredAt,
                 ];
+                if ($patient['medicine']) {
+                    $patient += [
+                        'tagged_med_at' => $encounteredAt,
+                    ];
+                }
                 try {
                     $case = VentiRecord::create($patient);
                 } catch (Exception $e) {
@@ -97,6 +102,7 @@ class Venti
                         }
                         if ($key == 'medicine' && $value) {
                             Log::info('event case tagged med');
+                            $case->tagged_med_at = now();
                         }
                     }
                 }
