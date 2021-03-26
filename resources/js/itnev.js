@@ -9,3 +9,7 @@ const itnev = function () {
     .then(response => response.json())
     .then(data => console.log(data))
 }
+
+const clearItnev = setInterval(itnev, 60000);
+
+clearInterval(clearItnev);

@@ -73,7 +73,7 @@ class Venti
                 // create case
                 $minutes = (((int) $los[0]) ?? 0) * 60;
                 $minutes += (((int) $los[1]) ?? 0);
-                $encounteredAt = now()->addMinutes($minutes);
+                $encounteredAt = now()->addMinutes($minutes * -1);
                 $patient += [
                     'no' => $encounteredAt->format('ymdHi').$patient['hn'],
                     'encountered_at' => $encounteredAt,
