@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\VentiRecord;
+use Illuminate\Support\Facades\Cache;
 
 class Venti
 {
@@ -58,6 +59,7 @@ class Venti
             $p++;
         }
 
+        $medicineCases = [];
         foreach ($patients as $patient) {
             // if no hn in DB or hn discharged then create new case
             $case = VentiRecord::whereHn($patient['hn'])
@@ -67,17 +69,38 @@ class Venti
             unset($patient['los']);
             if (! $case) {
                 // create case
-                $case = VentiRecord::create($patient);
                 $minutes = (((int) $los[0]) ?? 0) * 60;
                 $minutes += (((int) $los[1]) ?? 0);
-                $case->encountered_at = now()->addMinutes($minutes);
-                $case->save();
+                $encounteredAt = now()->addMinutes($minutes);
+                $patient += [
+                    'no' => $encounteredAt->format('ymdHi').$patient['hn'],
+                    'encountered_ay' => $encounteredAt,
+                ];
+                // $case->encountered_at = $encounteredAt;
+                // $case->no = $encounteredAt->format('ymdHi') . $patient['hn'];
+                $case = VentiRecord::create($patient);
+            // $case->save();
             } else {
                 // else update case
                 $case->update($patient);
             }
+
+            if ($case->medicine) {
+                $medicineCases[] = $case;
+            }
         }
 
+        $latestlist = Cache::get('latestlist', []);
+        $list = collect($patients)->pluck('hn')->toArray();
+        $dismissedCases = [];
+        collect($latestlist)->diff($list)->each(function ($hn) use ($dismissedCases) {
+            $case = VentiRecord::whereHn($hn)->whereNull('dismissed_at')->first();
+            $case->update(['dismissed_at' => now()]);
+            $dismissedCases[] = $case;
+        });
+
+        Cache::put('latestlist', $list);
+        \Log::info(collect($dismissedCases)->pluck(['hn', 'dismissed_at']));
         // \Log::info($patients);
         // $lastlist = collect($patients)->pluck('hn')->toArray();
         // if (\Cache::has('lastlist')) {
