@@ -33,6 +33,8 @@ class Venti
             }
         }
 
+        $spanPatientsCount = count($patients);
+
         $countTags = count($ps) - 1;
         $i = 0;
         $p = 0;
@@ -60,6 +62,9 @@ class Venti
                 $i += 5;
             }
             $p++;
+            if ($p >= $spanPatientsCount) {
+                break;
+            }
         }
 
         $medicineCases = [];
