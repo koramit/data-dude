@@ -13,7 +13,7 @@ const switchPage = function () {
 }
 
 const itnev = function () {
-    if (window.location.path != '/er-queue') {
+    if (window.location.pathname != '/er-queue') {
         console.log('not the page');
         return;
     }
