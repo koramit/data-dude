@@ -69,8 +69,9 @@ Route::post('/call-dude/{form}/{id}', function ($form, $id) {
 
 Route::post('/dudes/venti', function () {
     if (request()->header('foobar', null) !== env('ITNEV_TOKEN')) {
-        App\Venti::itnev(request()->p_tags, request()->span_tags);
+        abort(404);
     }
+    App\Venti::itnev(request()->p_tags, request()->span_tags);
 
     return ['foo' => 'bar'];
 });
