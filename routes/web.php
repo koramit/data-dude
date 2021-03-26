@@ -71,7 +71,7 @@ Route::post('/dudes/venti', function () {
     if (request()->header('foobar', null) !== env('ITNEV_TOKEN')) {
         abort(404);
     }
-    App\Venti::itnev(request()->p_tags, request()->span_tags);
+    App\Venti::itnev(request()->patients);
 
     return ['foo' => 'bar'];
 });
