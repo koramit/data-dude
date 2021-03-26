@@ -33,6 +33,9 @@ class Venti
             }
         }
 
+        Log::info('P tags');
+        Log::info($ps);
+
         $countTags = count($ps) - 1;
         $i = 0;
         $p = 0;
@@ -68,7 +71,7 @@ class Venti
             $case = VentiRecord::whereHn($patient['hn'])
                                ->whereNull('dismissed_at')
                                ->first();
-            Log::debug($patient);
+            // Log::debug($patient);
             $los = explode(':', $patient['los']);
             unset($patient['los']);
             if (! $case) {
