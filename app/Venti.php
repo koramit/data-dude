@@ -86,8 +86,17 @@ class Venti
                 }
             } else {
                 // update case
+                $updates = false;
+                foreach ($patient as $key => $value) {
+                    if ($case->$key != $value) {
+                        $case->$key = $value;
+                        $updates = true;
+                    }
+                }
                 try {
-                    $case->update($patient);
+                    if ($updates) {
+                        $case->save();
+                    }
                 } catch (Exception $e) {
                     \Log::error('update case error');
                     \Log::error($patient);
