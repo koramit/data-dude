@@ -46,8 +46,9 @@ class Venti
                 ];
                 $i += 6;
             } else {
+                $isMed = strtolower($ps[$i + 2]) == 'C4';
                 $patients[$p] += [
-                    'medicine' => false,
+                    'medicine' => $isMed,
                     'recheck' => $ps[$i],
                     'dx' => str_replace("\n", '', $ps[$i + 1]),
                     'counter' => $ps[$i + 2],
