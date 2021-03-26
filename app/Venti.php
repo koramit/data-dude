@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\VentiRecord;
+use Exception;
 use Illuminate\Support\Facades\Cache;
 
 class Venti
@@ -77,13 +78,20 @@ class Venti
                     'no' => $encounteredAt->format('ymdHi').$patient['hn'],
                     'encountered_at' => $encounteredAt,
                 ];
-                // $case->encountered_at = $encounteredAt;
-                // $case->no = $encounteredAt->format('ymdHi') . $patient['hn'];
-                $case = VentiRecord::create($patient);
-            // $case->save();
+                try {
+                    $case = VentiRecord::create($patient);
+                } catch (Exception $e) {
+                    \Log::error('create case error');
+                    \Log::error($patient);
+                }
             } else {
-                // else update case
-                $case->update($patient);
+                // update case
+                try {
+                    $case->update($patient);
+                } catch (Exception $e) {
+                    \Log::error('update case error');
+                    \Log::error($patient);
+                }
             }
 
             if ($case->medicine) {
