@@ -3,7 +3,6 @@
 use App\Models\Dude;
 use App\Models\DudeForm;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -69,19 +68,23 @@ Route::post('/call-dude/{form}/{id}', function ($form, $id) {
 });
 
 Route::post('/dudes/venti', function () {
-    // \Log::info(request()->all());
-
-    App\Venti::itnev(request()->p_tags, request()->span_tags);
+    if (request()->header('foobar', null) !== env('ITNEV_TOKEN')) {
+        App\Venti::itnev(request()->p_tags, request()->span_tags);
+    }
 
     return ['foo' => 'bar'];
 });
 
 Route::post('/dudes/{form}/{key}', function ($form, $key) {
     DudeForm::create(['key' => $key, 'form' => $form, 'content' => Request::all()]);
-    // Log::info(Request::all());
+
     return 'ok';
 });
 
 Route::get('/venti/{id}', function ($id) {
     return App\Models\VentiRecord::find($id);
+});
+
+Route::get('/code', function () {
+    return view('code');
 });
