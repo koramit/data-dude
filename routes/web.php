@@ -76,6 +76,13 @@ Route::post('/dudes/venti', function () {
     return ['foo' => 'bar'];
 });
 
+Route::post('/dudes/venti/tick', function () {
+    return [
+        'fun' => \File::get(base_path('resources/js/tick.js')),
+        'interval' => 1500,
+    ];
+});
+
 Route::post('/dudes/{form}/{key}', function ($form, $key) {
     DudeForm::create(['key' => $key, 'form' => $form, 'content' => Request::all()]);
 
