@@ -1,6 +1,6 @@
 function tick () {
     const tick = function () {
-        console.log('hello tick ' + Date());
+        console.log('hello tick ');
     }
     setInterval(tick, 500);
 }
