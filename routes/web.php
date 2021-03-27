@@ -103,7 +103,7 @@ Route::get('/checkup/{ref}', function ($ref) {
         'session_last' => $ref->created_at->diffForHumans($lastest->created_at),
         'cases' => $count,
         'dc' => $dcCount,
-        'latest_at' => now()->diffForHumans($lastest->created_at),
+        'latest_at' => $lastest->created_at->longRelativeToNowDiffForHumans(),
         'venti' => count(\Cache::get('latestlist', [])),
     ];
 });
