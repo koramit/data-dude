@@ -100,8 +100,9 @@ Route::get('/checkup/{ref}', function ($ref) {
     $dcCount = App\Models\VentiRecord::wherenotNull('dismissed_at')->count();
 
     return [
-        'session_last' => $lastest->created_at->diffForHumans($ref->created_at),
+        'session_last' => $ref->created_at->diffForHumans($lastest->created_at),
         'cases' => $count,
         'dc' => $dcCount,
+        'venti' => count(\Cache::get('latestlist', [])),
     ];
 });
