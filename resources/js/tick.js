@@ -1,4 +1,4 @@
-function () {
+function tick () {
     const tick = function () {
         console.log('hello tick ' + Date());
     }
