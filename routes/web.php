@@ -108,7 +108,7 @@ Route::get('/checkup/{ref}', function ($ref) {
 
     return [
         'checkup' => now()->tz('Asia/bangkok')->format('d M Y H:i'),
-        'session_last' => $ref->created_at->diffForHumans($lastest->created_at),
+        'session_last' => $ref->created_at->diffInMinutes($lastest->created_at).' mins',
         'cases' => $count,
         'dc' => $dcCount,
         'latest_at' => $lastest->created_at->longRelativeToNowDiffForHumans(),
