@@ -1,6 +1,4 @@
-function tick () {
-    const funtick = function () {
-        console.log('hello funtick ');
-    }
-    setInterval(funtick, 500);
+const funtick = function () {
+    console.log('hello funtick ');
 }
+setInterval(funtick, 500);
