@@ -89,3 +89,19 @@ Route::get('/venti/{id}', function ($id) {
 Route::get('/code', function () {
     return view('code');
 });
+
+Route::get('/checkup/{ref}', function ($ref) {
+    $ref = App\Models\VentiRecord::find($ref);
+
+    $lastest = App\Models\VentiRecord::orderBy('created_at', 'desc')->first();
+
+    $count = App\Models\VentiRecord::count();
+
+    $dcCount = App\Models\VentiRecord::wherenotNull('dismissed_at')->count();
+
+    return [
+        'session_last' => $lastest->created_at->diffForHumans($ref->created_at),
+        'cases' => $count,
+        'dc' => $dcCount,
+    ];
+});
