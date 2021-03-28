@@ -104,11 +104,11 @@ class Venti
             $no = $encounteredAt->format('ymdHi').$patient['hn'];
             $case = VentiRecord::whereNo($no)->first();
             if (! $case) {
-                $history = Cache::get('venti-hisroty', collect([]));
+                $history = Cache::get('venti-history', collect([]));
                 $old = $history->firstWhere('hn', $patient['hn']);
                 if (! $old) {
                     $history->push($patient);
-                    Cache::put('venti-hisroty', $history);
+                    Cache::put('venti-history', $history);
                 }
                 continue;
             }
