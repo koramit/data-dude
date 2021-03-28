@@ -53,35 +53,39 @@ const itnev = function () {
         body: JSON.stringify({ "patients": patients })
     })
     .then(response => response.json())
-    .then(data => console.log(data));
+    .then(data => {
+        console.log(data);
+        document.querySelector('div.sidenav-item:nth-child(9)').click();
+        setTimeout(() => {
+            let patients = [...document.querySelectorAll('mat-row')].map(row => {
+                let patient = {
+                    'hn': row.querySelector('mat-cell.mat-column-hn').textContent.trim(),
+                    'movement': row.querySelector('mat-cell.mat-column-movementType').textContent.trim(),
+                    'cc': row.querySelector('mat-cell.mat-column-cc').textContent.replaceAll("\n", '').trim(),
+                    'dx': row.querySelector('mat-cell.mat-column-diag').textContent.replaceAll("\n", '').trim(),
+                    'insurance': row.querySelector('mat-cell.mat-column-scheme').textContent.trim(),
+                    'encountered_at': row.querySelector('mat-cell.mat-column-Check-in').textContent + ' ' + row.querySelector('mat-cell.mat-column-Check-in-time').textContent,
+                    'dismissed_at': row.querySelector('mat-cell.mat-column-Check-out').textContent + ' ' + row.querySelector('mat-cell.mat-column-Check-out-time').textContent,
+                    'outcome': row.querySelector('mat-cell.mat-column-dispose').textContent.trim(),
+                };
+                return patient;
+            });
+            fetch('http://172.21.106.10:7070/dudes/venti/history', {
+                method: 'post',
+                headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                body: JSON.stringify({ "patients": patients })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                document.querySelector('div.sidenav-item:nth-child(2)').click();
+            });
+        }, 5000);
+    });
 
     // goto history
-    setTimeout(() => document.querySelector('div.sidenav-item:nth-child(9)').click(), 1500);
-    setTimeout(() => {
-        let patients = [...document.querySelectorAll('mat-row')].map(row => {
-            let patient = {
-                'hn': row.querySelector('mat-cell.mat-column-hn').textContent.trim(),
-                'movement': row.querySelector('mat-cell.mat-column-movementType').textContent.trim(),
-                'cc': row.querySelector('mat-cell.mat-column-cc').textContent.replaceAll("\n", '').trim(),
-                'dx': row.querySelector('mat-cell.mat-column-diag').textContent.replaceAll("\n", '').trim(),
-                'insurance': row.querySelector('mat-cell.mat-column-scheme').textContent.trim(),
-                'encountered_at': row.querySelector('mat-cell.mat-column-Check-in').textContent + ' ' + row.querySelector('mat-cell.mat-column-Check-in-time').textContent,
-                'dismissed_at': row.querySelector('mat-cell.mat-column-Check-out').textContent + ' ' + row.querySelector('mat-cell.mat-column-Check-out-time').textContent,
-                'outcome': row.querySelector('mat-cell.mat-column-dispose').textContent.trim(),
-            };
-            return patient;
-        });
-        fetch('http://172.21.106.10:7070/dudes/venti/history', {
-            method: 'post',
-            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-            body: JSON.stringify({ "patients": patients })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            document.querySelector('div.sidenav-item:nth-child(2)').click();
-        });
-    }, 5500);
+    // setTimeout(() => document.querySelector('div.sidenav-item:nth-child(9)').click(), 1500);
+
 }
 
 const clearItnev = setInterval(itnev, 60000);
