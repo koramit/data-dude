@@ -48,10 +48,10 @@ class Venti
                         $case->$key = $value;
                         $updates = true;
                         if ($key == 'dx') {
-                            Log::info('event dx change');
+                            Log::info('event dx change '.$case->no);
                         }
                         if ($key == 'medicine' && $value) {
-                            Log::info('event case tagged med');
+                            Log::info('event case tagged med '.$case->no);
                             $case->tagged_med_at = now();
                         }
                     }
@@ -85,6 +85,7 @@ class Venti
 
         Cache::put('latestlist', $list);
         if (count($dismissedCases)) {
+            Log::info('Discharge event');
             Log::info(collect($dismissedCases)->pluck(['hn', 'dismissed_at']));
         }
 
