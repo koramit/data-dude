@@ -108,6 +108,7 @@ class Venti
                 $old = $history->firstWhere('hn', $patient['hn']);
                 if (! $old) {
                     $history->push($patient);
+                    Cache::put($history);
                 }
                 continue;
             }
