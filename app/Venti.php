@@ -120,7 +120,7 @@ class Venti
             $dirty = false;
             foreach (['movement', 'cc', 'dx', 'insurence', 'outcome'] as $field) {
                 if ($patient[$field] && $case->$field != $patient['field']) {
-                    $case->$field = $patient['field'];
+                    $case->$field = $patient[$field];
                     $dirty = true;
                 }
             }
