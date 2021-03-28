@@ -119,14 +119,14 @@ class Venti
 
             $dirty = false;
             foreach (['movement', 'cc', 'dx', 'insurance', 'outcome'] as $field) {
-                if ($patient[$field] && $case->$field != $patient['field']) {
+                if ($patient[$field] && $case->$field != $patient[$field]) {
                     $case->$field = $patient[$field];
                     $dirty = true;
                 }
             }
 
             foreach (['encountered_at', 'dismissed_at'] as $field) {
-                $timestamp = Carbon::parse($patient['field'], 'asia/bangkok')->tz('utc');
+                $timestamp = Carbon::parse($patient[$field], 'asia/bangkok')->tz('utc');
                 if ($case->$field->format('Y-m-d H:i') != $timestamp->format('Y-m-d H:i')) {
                     $case->$field = $timestamp;
                     $dirty = true;
