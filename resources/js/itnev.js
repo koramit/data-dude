@@ -83,6 +83,3 @@ const itnev = function () {
         }, 8000);
     });
 }
-
-const clearItnev = setInterval(itnev, 60000);
-const clearSwitch = setInterval(switchPage, 600000);
