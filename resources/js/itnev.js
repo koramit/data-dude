@@ -1,10 +1,10 @@
 const switchPage = function () {
-    let wait = (Math.floor(Math.random() * Math.floor(10)) + 5) * 1000; // [5 - 14]
+    let wait = (Math.floor(Math.random() * Math.floor(8)) + 5) * 1000; // [5 - 12]
     console.log('wait ' + (wait/1000) + ' seconds before switch');
     let page = Math.floor(Math.random() * Math.floor(4)) + 3; // [3 - 6]
     setTimeout(() => {
         document.querySelector('.navbar > div:nth-child(' + page + ') > a:nth-child(1)').click(); // menu Q doctor
-        let stay = (Math.floor(Math.random() * Math.floor(10)) + 5) * 1000; // [5 - 14]
+        let stay = (Math.floor(Math.random() * Math.floor(8)) + 5) * 1000; // [5 - 12]
         console.log('stay for ' + (stay/1000) + ' seconds');
         setTimeout(
             () => document.querySelector('.navbar > div:nth-child(2) > a:nth-child(1)').click() // menu Whiteboard
@@ -38,7 +38,7 @@ const itnev = function () {
             { name: 'remark'  , selector: 'div.round-rect > p' }
         ].forEach(field => {
             let dom = node.querySelector(field.selector);
-            patient[field.name] = (dom && dom !== undefined) ? dom.textContent.trim() : null;
+            patient[field.name] = (dom && dom !== undefined) ? dom.textContent.replaceAll("\n", '').trim() : null;
         })
 
         if (! patient.medicine && patient.counter == 'C4') {
@@ -80,7 +80,7 @@ const itnev = function () {
                 console.log(data);
                 document.querySelector('div.sidenav-item:nth-child(2)').click();
             });
-        }, 5000);
+        }, 8000);
     });
 }
 
