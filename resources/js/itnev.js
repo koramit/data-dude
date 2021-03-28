@@ -82,10 +82,6 @@ const itnev = function () {
             });
         }, 5000);
     });
-
-    // goto history
-    // setTimeout(() => document.querySelector('div.sidenav-item:nth-child(9)').click(), 1500);
-
 }
 
 const clearItnev = setInterval(itnev, 60000);
