@@ -41,6 +41,8 @@ const itnev = function () {
             patient[field.name] = (dom && dom !== undefined) ? dom.textContent.replaceAll("\n", '').trim() : null;
         })
 
+        patient.hn = patient.hn.replace('HN', '');
+
         if (! patient.medicine && patient.counter == 'C4') {
             patient.medicine = true;
         }
