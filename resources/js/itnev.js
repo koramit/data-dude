@@ -86,14 +86,3 @@ const itnev = function () {
 
 const clearItnev = setInterval(itnev, 60000);
 const clearSwitch = setInterval(switchPage, 600000);
-
-clearInterval(clearItnev);
-clearInterval(clearSwitch);
-
-// let trigger = document.querySelector('div.page-selection').querySelector('div.mat-select-trigger');
-// trigger.click();
-// let options;
-// setTimeout(() => {
-//     options = [...document.querySelector('div.ng-trigger-transformPanel').querySelectorAll('mat-option')];
-// }, 1000);
-// options[1].click();

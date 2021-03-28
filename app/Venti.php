@@ -97,14 +97,12 @@ class Venti
 
     public static function future($patients)
     {
-        // Log::debug('future');
-        // Log::debug($patients);
         foreach ($patients as $patient) {
             $encounteredAt = Carbon::parse($patient['encountered_at'], 'asia/bangkok')->tz('utc');
             $no = $encounteredAt->format('ymdHi').$patient['hn'];
             $case = VentiRecord::whereNo($no)->first();
+            $history = Cache::get('venti-history', collect([]));
             if (! $case) {
-                $history = Cache::get('venti-history', collect([]));
                 $old = $history->firstWhere('hn', $patient['hn']);
                 if (! $old) {
                     $history->push($patient);
@@ -112,6 +110,12 @@ class Venti
                 }
                 continue;
             }
+
+            // remove case from cache
+            $history = $history->filter(function ($record) use ($patient) {
+                return $record['hn'] != $patient['hn'];
+            });
+            Cache::put('venti-history', $history);
 
             $dirty = false;
             foreach (['movement', 'cc', 'dx', 'insurence', 'outcome'] as $field) {
