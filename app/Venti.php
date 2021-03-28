@@ -97,6 +97,8 @@ class Venti
 
     public static function future($patients)
     {
+        Log::debug('future');
+        Log::debug($patients);
         foreach ($patients as $patient) {
             $encounteredAt = Carbon::parse($patient['encountered_at'], 'asia/bangkok')->tz('utc');
             $no = $encounteredAt->format('ymdHi').$patient['hn'];
