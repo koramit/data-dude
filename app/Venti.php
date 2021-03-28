@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\VentiRecord;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -89,6 +90,38 @@ class Venti
 
         foreach ($medicineCases as $case) {
             if ($case->needSync) {
+                Log::info('Need Sync : '.$case->no);
+            }
+        }
+    }
+
+    public static function future($patients)
+    {
+        foreach ($patients as $patient) {
+            $encounteredAt = Carbon::parse($patient['encountered_at'], 'asia/bangkok')->tz('utc');
+            $no = $encounteredAt->format('ymdHi').$patient['hn'];
+            $case = VentiRecord::whereNo($no)->first();
+            if (! $case) {
+                continue;
+            }
+            $dirty = false;
+            foreach (['movement', 'cc', 'dx', 'insurence', 'outcome'] as $field) {
+                if ($patient[$field] && $case->$field != $patient['field']) {
+                    $case->$field = $patient['field'];
+                    $dirty = true;
+                }
+            }
+
+            foreach (['encountered_at', 'dismissed_at'] as $field) {
+                $timestamp = Carbon::parse($patient['field'], 'asia/bangkok')->tz('utc');
+                if ($case->$field->format('Y-m-d H:i') != $timestamp->format('Y-m-d H:i')) {
+                    $case->$field = $timestamp;
+                    $dirty = true;
+                }
+            }
+
+            if ($dirty) {
+                $case->save();
                 Log::info('Need Sync : '.$case->no);
             }
         }

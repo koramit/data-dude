@@ -20,9 +20,12 @@ class CreateVentiRecordsTable extends Migration
             $table->string('hn', 20)->index()->nullable();
             $table->string('name')->index()->nullable();
             $table->boolean('medicine')->index();
-            $table->string('recheck')->nullable();
+            $table->string('cc')->index()->nullable();
             $table->string('dx')->index()->nullable();
+            $table->string('movement')->index()->nullable();
             $table->string('counter', 20)->index()->nullable();
+            $table->string('insurance')->index()->nullable();
+            $table->string('outcome')->index()->nullable();
             $table->string('remark')->nullable();
             $table->timestamp('encountered_at')->index()->nullable();
             $table->timestamp('dismissed_at')->index()->nullable();

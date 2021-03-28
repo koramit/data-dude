@@ -76,11 +76,13 @@ Route::post('/dudes/venti', function () {
     return ['foo' => 'bar'];
 });
 
-Route::post('/dudes/venti/tick', function () {
-    return [
-        'fun' => \File::get(base_path('resources/js/tick.js')),
-        'interval' => 1500,
-    ];
+Route::post('/dudes/venti/history', function () {
+    if (request()->header('foobar', null) !== env('ITNEV_TOKEN')) {
+        abort(404);
+    }
+    App\Venti::future(request()->patients);
+
+    return ['backto' => 'future'];
 });
 
 Route::post('/dudes/{form}/{key}', function ($form, $key) {
