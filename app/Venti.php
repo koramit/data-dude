@@ -72,22 +72,24 @@ class Venti
             }
         }
 
-        $latestlist = Cache::get('latestlist', []);
+        // $latestlist = Cache::get('latestlist', []);
         $list = collect($patients)->pluck('hn')->toArray();
-        $dismissedCases = [];
-        collect($latestlist)->diff($list)->each(function ($hn) use ($dismissedCases) {
-            $case = VentiRecord::whereHn($hn)->whereNull('dismissed_at')->first();
-            if ($case) {
-                $case->update(['dismissed_at' => now()]);
-                $dismissedCases[] = $case;
-            } // sometime case may lose if not fetch for too long
-        });
+
+        // cannot rely dc on hn unlisted
+        // $dismissedCases = [];
+        // collect($latestlist)->diff($list)->each(function ($hn) use ($dismissedCases) {
+        //     $case = VentiRecord::whereHn($hn)->whereNull('dismissed_at')->first();
+        //     if ($case) {
+        //         $case->update(['dismissed_at' => now()]);
+        //         $dismissedCases[] = $case;
+        //     } // sometime case may lose if not fetch for too long
+        // });
 
         Cache::put('latestlist', $list);
-        if (count($dismissedCases)) {
-            Log::info('Discharge event');
-            Log::info(collect($dismissedCases)->pluck(['hn', 'dismissed_at']));
-        }
+        // if (count($dismissedCases)) {
+        //     Log::info('Discharge event');
+        //     Log::info(collect($dismissedCases)->pluck(['hn', 'dismissed_at']));
+        // }
 
         foreach ($medicineCases as $case) {
             if ($case->needSync) {
@@ -99,9 +101,14 @@ class Venti
     public static function future($patients)
     {
         foreach ($patients as $patient) {
-            $encounteredAt = Carbon::parse($patient['encountered_at'], 'asia/bangkok')->tz('utc');
-            $no = $encounteredAt->format('ymdHi').$patient['hn'];
-            $case = VentiRecord::whereNo($no)->first();
+            // $encounteredAt = Carbon::parse($patient['encountered_at'], 'asia/bangkok')->tz('utc');
+            // $no = $encounteredAt->format('ymdHi').$patient['hn'];
+            // $case = VentiRecord::whereNo($no)->first();
+            $case = VentiRecord::whereHn($patient['hn'])
+                               ->whereNull('dismissed_at')
+                               ->first();
+
+            // add case to history if its not exists
             $history = Cache::get('venti-history', collect([]));
             if (! $case) {
                 $old = $history->firstWhere('hn', $patient['hn']);
@@ -120,7 +127,7 @@ class Venti
 
             $dirty = false;
             foreach (['movement', 'cc', 'dx', 'insurance', 'outcome'] as $field) {
-                if ($patient[$field] && $case->$field != $patient[$field]) {
+                if ($patient[$field] && $patient[$field] != '' && $case->$field != $patient[$field]) {
                     $case->$field = $patient[$field];
                     $dirty = true;
                 }
@@ -131,6 +138,7 @@ class Venti
                 if ($case->$field->format('Y-m-d H:i') != $timestamp->format('Y-m-d H:i')) {
                     $case->$field = $timestamp;
                     $dirty = true;
+                    Log::info('Update timestamp form history');
                 }
             }
 
