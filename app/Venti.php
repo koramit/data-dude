@@ -100,6 +100,7 @@ class Venti
 
     public static function future($patients)
     {
+        $medicineCases = [];
         foreach ($patients as $patient) {
             // $encounteredAt = Carbon::parse($patient['encountered_at'], 'asia/bangkok')->tz('utc');
             // $no = $encounteredAt->format('ymdHi').$patient['hn'];
@@ -145,7 +146,14 @@ class Venti
             if ($dirty) {
                 $case->save();
                 Log::info('Need Sync : '.$case->no);
+                if ($case->medicine) {
+                    $medicineCases[] = $case;
+                }
             }
+        }
+
+        if (count($medicineCases)) {
+            //update
         }
     }
 }
