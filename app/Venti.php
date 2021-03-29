@@ -12,6 +12,7 @@ class Venti
 {
     public static function itnev($patients)
     {
+        $medicineCases = [];
         foreach ($patients as $patient) {
             // if no hn in DB or hn discharged then create new case
             $case = VentiRecord::whereHn($patient['hn'])
@@ -19,8 +20,7 @@ class Venti
                                ->first();
             $los = explode(':', $patient['los']);
             unset($patient['los']);
-            if (! $case) {
-                // create case
+            if (! $case) { // new case - create
                 $minutes = (((int) $los[0]) ?? 0) * 60;
                 $minutes += (((int) $los[1]) ?? 0);
                 $encounteredAt = now()->addMinutes($minutes * -1);
@@ -40,8 +40,7 @@ class Venti
                     Log::error($patient);
                 }
                 $case->needSync = true;
-            } else {
-                // update case
+            } else { // old case - update
                 $updates = false;
                 foreach ($patient as $key => $value) {
                     if ($case->$key != $value) {
@@ -72,25 +71,8 @@ class Venti
             }
         }
 
-        // $latestlist = Cache::get('latestlist', []);
         $list = collect($patients)->pluck('hn')->toArray();
-
-        // cannot rely dc on hn unlisted
-        // $dismissedCases = [];
-        // collect($latestlist)->diff($list)->each(function ($hn) use ($dismissedCases) {
-        //     $case = VentiRecord::whereHn($hn)->whereNull('dismissed_at')->first();
-        //     if ($case) {
-        //         $case->update(['dismissed_at' => now()]);
-        //         $dismissedCases[] = $case;
-        //     } // sometime case may lose if not fetch for too long
-        // });
-
         Cache::put('latestlist', $list);
-        // if (count($dismissedCases)) {
-        //     Log::info('Discharge event');
-        //     Log::info(collect($dismissedCases)->pluck(['hn', 'dismissed_at']));
-        // }
-
         foreach ($medicineCases as $case) {
             if ($case->needSync) {
                 Log::info('Need Sync : '.$case->no);
@@ -102,9 +84,6 @@ class Venti
     {
         $medicineCases = [];
         foreach ($patients as $patient) {
-            // $encounteredAt = Carbon::parse($patient['encountered_at'], 'asia/bangkok')->tz('utc');
-            // $no = $encounteredAt->format('ymdHi').$patient['hn'];
-            // $case = VentiRecord::whereNo($no)->first();
             $case = VentiRecord::whereHn($patient['hn'])
                                ->whereNull('dismissed_at')
                                ->first();
@@ -112,6 +91,14 @@ class Venti
             // add case to history if its not exists
             $history = Cache::get('venti-history', collect([]));
             if (! $case) {
+                $dismissedAt = Carbon::parse($patient['dismissed_at'], 'asia/bangkok')->tz('utc');
+                $old = VentiRecord::whereHn($patient['hn'])
+                                  ->whereDismissedAt($dismissedAt)
+                                  ->first();
+                if ($old) { // case already exists and discharged
+                    continue;
+                }
+
                 $old = $history->firstWhere('hn', $patient['hn']);
                 if (! $old) {
                     $history->push($patient);
@@ -120,15 +107,16 @@ class Venti
                 continue;
             }
 
-            // remove case from cache
+            // case found - remove it from history cache
             $history = $history->filter(function ($record) use ($patient) {
                 return $record['hn'] != $patient['hn'];
             });
             Cache::put('venti-history', $history);
 
+            // update case
             $dirty = false;
             foreach (['movement', 'cc', 'dx', 'insurance', 'outcome'] as $field) {
-                if ($patient[$field] && $patient[$field] != '' && $case->$field != $patient[$field]) {
+                if ($patient[$field] && ($patient[$field] != '') && ($case->$field != $patient[$field])) {
                     $case->$field = $patient[$field];
                     $dirty = true;
                 }
