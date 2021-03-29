@@ -135,7 +135,7 @@ class Venti
 
             foreach (['encountered_at', 'dismissed_at'] as $field) {
                 $timestamp = Carbon::parse($patient[$field], 'asia/bangkok')->tz('utc');
-                if ($case->$field->format('Y-m-d H:i') != $timestamp->format('Y-m-d H:i')) {
+                if ((! $case->$field) || ($case->$field->format('Y-m-d H:i') != $timestamp->format('Y-m-d H:i'))) {
                     $case->$field = $timestamp;
                     $dirty = true;
                     Log::info('Update timestamp form history');
