@@ -84,6 +84,8 @@ class Venti
                 Log::info('Need Sync : '.$case->no);
             }
         }
+
+        static::monitor();
     }
 
     public static function future($patients)
@@ -149,5 +151,35 @@ class Venti
         if (count($medicineCases)) {
             //update
         }
+    }
+
+    public static function monitor()
+    {
+        $now = [
+            'cases' => VentiRecord::count(),
+            'dc' => VentiRecord::wherenotNull('dismissed_at')->count(),
+            'med' => VentiRecord::whereMedicine(true)->count(),
+            'venti' => count(Cache::get('latestlist', [])),
+        ];
+        $monitor = Cache::get('venti-monitor', []);
+        if (count($monitor) < 20) {
+            $monitor[] = $now;
+            Cache::put('venti-monitor', $monitor);
+
+            return;
+        }
+
+        if ($monitor[0]['cases'] != $now['cases'] ||
+            $monitor[0]['dc'] != $now['dc'] ||
+            $monitor[0]['med'] != $now['med'] ||
+            $monitor[0]['venti'] != $now['venti']
+        ) {
+            Cache::put('venti-monitor', []);
+
+            return;
+        }
+        $monitor[] = $now;
+        Cache::put('venti-monitor', $monitor);
+        Log::critical('venti not update for '.count($monitor).' iterations');
     }
 }
