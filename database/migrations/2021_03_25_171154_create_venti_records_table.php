@@ -15,7 +15,7 @@ class CreateVentiRecordsTable extends Migration
     {
         Schema::create('venti_records', function (Blueprint $table) {
             $table->id();
-            $table->string('no', 20)->index()->nullable();
+            $table->string('no', 20)->unique();
             $table->string('bed', 20)->nullable();
             $table->string('hn', 20)->index()->nullable();
             $table->string('name')->index()->nullable();

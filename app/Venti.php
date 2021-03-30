@@ -20,10 +20,16 @@ class Venti
                                ->first();
             $los = explode(':', $patient['los']);
             unset($patient['los']);
+
+            $minutes = (((int) $los[0]) ?? 0) * 60;
+            $minutes += (((int) $los[1]) ?? 0);
+            $encounteredAt = now()->addMinutes($minutes * -1);
+
+            if (! $case) { // double check on new ase
+                $case = VentiRecord::where('no', 'like', $encounteredAt->format('ymdH').'%'.$patient['hn'])->first();
+            }
+
             if (! $case) { // new case - create
-                $minutes = (((int) $los[0]) ?? 0) * 60;
-                $minutes += (((int) $los[1]) ?? 0);
-                $encounteredAt = now()->addMinutes($minutes * -1);
                 $patient += [
                     'no' => $encounteredAt->format('ymdHi').$patient['hn'],
                     'encountered_at' => $encounteredAt,
