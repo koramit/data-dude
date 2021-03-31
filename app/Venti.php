@@ -12,6 +12,7 @@ class Venti
 {
     public static function itnev($patients)
     {
+        Log::info('itnev process...');
         $medicineCases = [];
         foreach ($patients as $patient) {
             // if no hn in DB or hn discharged then create new case
@@ -24,8 +25,6 @@ class Venti
             $minutes = (((int) $los[0]) ?? 0) * 60;
             $minutes += (((int) $los[1]) ?? 0);
             $encounteredAt = now()->addMinutes($minutes * -1);
-
-            // $hnCollection = collect($patients)->pluck('hn');
 
             if (! $case) { // double check on new ase
                 $case = VentiRecord::where('no', 'like', $encounteredAt->format('ymdH').'%'.$patient['hn'])->first();
@@ -63,10 +62,6 @@ class Venti
                         }
                     }
                 }
-                // if ($hnCollection->search($case->hn) === false) { // $case not in collection, imply DC
-                //     $case->dismissed_at = now();
-                //     $updates = true;
-                // }
                 try {
                     if ($updates) {
                         $case->save();
@@ -84,8 +79,6 @@ class Venti
         }
 
         $list = collect($patients)->pluck('hn')->toArray();
-        // $list = collect($patients)->pluck('hn');
-        // $list = $hnCollection->toArray();
         Cache::put('latestlist', $list);
         foreach ($medicineCases as $case) {
             if ($case->needSync) {
@@ -105,6 +98,7 @@ class Venti
 
     public static function future($patients)
     {
+        Log::info('future process...');
         $medicineCases = [];
         foreach ($patients as $patient) {
             $case = VentiRecord::whereHn($patient['hn'])
@@ -170,6 +164,7 @@ class Venti
 
     public static function monitor()
     {
+        Log::info('monitor process...');
         $now = [
             'cases' => VentiRecord::count(),
             'dc' => VentiRecord::wherenotNull('dismissed_at')->count(),
