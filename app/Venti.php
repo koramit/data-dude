@@ -162,7 +162,9 @@ class Venti
             'venti' => count(Cache::get('latestlist', [])),
         ];
         $monitor = Cache::get('venti-monitor', []);
-        if (count($monitor) < 20) {
+
+        $alertAt = (int) env('VENTI_ALERT');
+        if (count($monitor) < $alertAt) {
             $monitor[] = $now;
             Cache::put('venti-monitor', $monitor);
 
@@ -172,12 +174,14 @@ class Venti
         if ($monitor[0]['cases'] != $now['cases'] ||
             $monitor[0]['dc'] != $now['dc'] ||
             $monitor[0]['med'] != $now['med'] ||
-            $monitor[0]['venti'] != $now['venti']
+            $monitor[0]['venti'] != $now['venti'] ||
+            count($monitor) > ($alertAt * 1.5)
         ) {
             Cache::put('venti-monitor', []);
 
             return;
         }
+
         $monitor[] = $now;
         Cache::put('venti-monitor', $monitor);
         Log::critical('venti not update for '.count($monitor).' iterations');
