@@ -96,7 +96,7 @@ class Venti
         $cases = VentiRecord::whereNull('dismissed_at')->whereNotIn('hn', $list)->get();
 
         foreach ($cases as $case) {
-            $case->save(['dismissed_at' => now()]);
+            $case->update(['dismissed_at' => now()]);
             Log::info('DC from er-queue '.$case->no);
         }
 
