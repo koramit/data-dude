@@ -117,3 +117,9 @@ Route::get('/checkup/{ref}', function ($ref) {
         'venti' => count(\Cache::get('latestlist', [])),
     ];
 });
+
+Route::get('/debug/{text}', function ($text) {
+    \Log::debug($text);
+
+    return $text;
+});
