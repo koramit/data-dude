@@ -63,7 +63,7 @@ class Venti
                         }
                     }
                 }
-                if ($hnCollection->search($case->hn) !== false) {
+                if ($hnCollection->search($case->hn) === false) { // $case not in collection
                     $case->dismissed_at = now();
                     $updates = true;
                 }
