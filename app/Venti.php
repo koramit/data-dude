@@ -50,11 +50,11 @@ class Venti
                 $updates = false;
                 foreach ($patient as $key => $value) {
                     if ($case->$key != $value) {
+                        if ($key == 'dx') {
+                            Log::info('event dx change '.$case->no.' : '.$case->$key.' => '.$value);
+                        }
                         $case->$key = $value;
                         $updates = true;
-                        if ($key == 'dx') {
-                            Log::info('event dx change '.$case->no);
-                        }
                         if ($key == 'medicine' && $value) {
                             Log::info('event case tagged med '.$case->no);
                             $case->tagged_med_at = now();
