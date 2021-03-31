@@ -93,7 +93,7 @@ class Venti
             }
         }
 
-        $cases = VentiRecord::whereNotIn('hn', $list)->get();
+        $cases = VentiRecord::whereNull('dismissed_at')->whereNotIn('hn', $list)->get();
 
         foreach ($cases as $case) {
             $case->save(['dismissed_at' => now()]);
