@@ -12,7 +12,6 @@ class Venti
 {
     public static function itnev($patients)
     {
-        Log::info('itnev process...');
         $medicineCases = [];
         foreach ($patients as $patient) {
             // if no hn in DB or hn discharged then create new case
@@ -98,7 +97,6 @@ class Venti
 
     public static function future($patients)
     {
-        Log::info('future process...');
         $medicineCases = [];
         foreach ($patients as $patient) {
             $case = VentiRecord::whereHn($patient['hn'])
@@ -164,7 +162,6 @@ class Venti
 
     public static function monitor()
     {
-        Log::info('monitor process...');
         $now = [
             'cases' => VentiRecord::count(),
             'dc' => VentiRecord::wherenotNull('dismissed_at')->count(),
