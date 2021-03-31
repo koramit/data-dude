@@ -175,7 +175,7 @@ class Venti
             $monitor[0]['dc'] != $now['dc'] ||
             $monitor[0]['med'] != $now['med'] ||
             $monitor[0]['venti'] != $now['venti'] ||
-            count($monitor) > ($alertAt * 1.5)
+            count($monitor) > ($alertAt + 10)
         ) {
             Cache::put('venti-monitor', []);
 
