@@ -25,7 +25,7 @@ class Venti
             $minutes += (((int) $los[1]) ?? 0);
             $encounteredAt = now()->addMinutes($minutes * -1);
 
-            $hnCollection = collect($patients)->pluck('hn');
+            // $hnCollection = collect($patients)->pluck('hn');
 
             if (! $case) { // double check on new ase
                 $case = VentiRecord::where('no', 'like', $encounteredAt->format('ymdH').'%'.$patient['hn'])->first();
@@ -63,10 +63,10 @@ class Venti
                         }
                     }
                 }
-                if ($hnCollection->search($case->hn) === false) { // $case not in collection
-                    $case->dismissed_at = now();
-                    $updates = true;
-                }
+                // if ($hnCollection->search($case->hn) === false) { // $case not in collection, imply DC
+                //     $case->dismissed_at = now();
+                //     $updates = true;
+                // }
                 try {
                     if ($updates) {
                         $case->save();
@@ -83,13 +83,21 @@ class Venti
             }
         }
 
-        // $list = collect($patients)->pluck('hn')->toArray();
-        $list = $hnCollection->toArray();
+        $list = collect($patients)->pluck('hn')->toArray();
+        // $list = collect($patients)->pluck('hn');
+        // $list = $hnCollection->toArray();
         Cache::put('latestlist', $list);
         foreach ($medicineCases as $case) {
             if ($case->needSync) {
                 Log::info('Need Sync : '.$case->no);
             }
+        }
+
+        $cases = VentiRecord::whereNotIn('hn', $list)->get();
+
+        foreach ($cases as $case) {
+            $case->save(['dismissed_at' => now()]);
+            Log::info('DC from er-queue '.$case->no);
         }
 
         static::monitor();
