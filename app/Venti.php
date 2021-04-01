@@ -60,6 +60,7 @@ class Venti
                 } catch (Exception $e) {
                     Log::error('create case error');
                     Log::error($patient);
+                    continue;
                 }
             } else { // old case - update
                 $updates = false;
@@ -85,6 +86,7 @@ class Venti
                 } catch (Exception $e) {
                     Log::error('update case error');
                     Log::error($patient);
+                    continue;
                 }
             }
 
