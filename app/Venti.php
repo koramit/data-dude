@@ -25,6 +25,10 @@ class Venti
             $minutes = $minutes < 0 ? 0 : ($minutes * -1);
             $encounteredAt = now()->addMinutes($minutes);
 
+            // remove fields
+            unset($patient['bed']);
+            unset($patient['dx']);
+
             // if no hn in DB or hn discharged then create new case
             $case = VentiRecord::where('no', 'like', $encounteredAt->format('ymdH').'%'.$patient['hn'])
                                ->whereNull('dismissed_at')
@@ -108,67 +112,68 @@ class Venti
 
     public static function future($patients)
     {
-        $medicineCases = [];
-        foreach ($patients as $patient) {
-            $case = VentiRecord::whereHn($patient['hn'])
-                               ->whereNull('dismissed_at')
-                               ->first();
+        return [];
+        // $medicineCases = [];
+        // foreach ($patients as $patient) {
+        //     $case = VentiRecord::whereHn($patient['hn'])
+        //                        ->whereNull('dismissed_at')
+        //                        ->first();
 
-            // add case to history if its not exists
-            $history = Cache::get('venti-history', collect([]));
-            if (! $case) {
-                $dismissedAt = Carbon::parse($patient['dismissed_at'], 'asia/bangkok')->tz('utc');
-                $old = VentiRecord::whereHn($patient['hn'])
-                                  ->whereDismissedAt($dismissedAt)
-                                  ->first();
-                if ($old) { // case already exists and discharged
-                    continue;
-                }
+        //     // add case to history if its not exists
+        //     $history = Cache::get('venti-history', collect([]));
+        //     if (! $case) {
+        //         $dismissedAt = Carbon::parse($patient['dismissed_at'], 'asia/bangkok')->tz('utc');
+        //         $old = VentiRecord::whereHn($patient['hn'])
+        //                           ->whereDismissedAt($dismissedAt)
+        //                           ->first();
+        //         if ($old) { // case already exists and discharged
+        //             continue;
+        //         }
 
-                $old = $history->firstWhere('hn', $patient['hn']);
-                if (! $old) {
-                    $history->push($patient);
-                    Cache::put('venti-history', $history);
-                }
-                continue;
-            }
+        //         $old = $history->firstWhere('hn', $patient['hn']);
+        //         if (! $old) {
+        //             $history->push($patient);
+        //             Cache::put('venti-history', $history);
+        //         }
+        //         continue;
+        //     }
 
-            // case found - remove it from history cache
-            $history = $history->filter(function ($record) use ($patient) {
-                return $record['hn'] != $patient['hn'];
-            });
-            Cache::put('venti-history', $history);
+        //     // case found - remove it from history cache
+        //     $history = $history->filter(function ($record) use ($patient) {
+        //         return $record['hn'] != $patient['hn'];
+        //     });
+        //     Cache::put('venti-history', $history);
 
-            // update case
-            $dirty = false;
-            foreach (['movement', 'cc', 'dx', 'insurance', 'outcome'] as $field) {
-                if ($patient[$field] && ($patient[$field] != '') && ($case->$field != $patient[$field])) {
-                    $case->$field = $patient[$field];
-                    $dirty = true;
-                }
-            }
+        //     // update case
+        //     $dirty = false;
+        //     foreach (['movement', 'cc', 'dx', 'insurance', 'outcome'] as $field) {
+        //         if ($patient[$field] && ($patient[$field] != '') && ($case->$field != $patient[$field])) {
+        //             $case->$field = $patient[$field];
+        //             $dirty = true;
+        //         }
+        //     }
 
-            foreach (['encountered_at', 'dismissed_at'] as $field) {
-                $timestamp = Carbon::parse($patient[$field], 'asia/bangkok')->tz('utc');
-                if ((! $case->$field) || ($case->$field->format('Y-m-d H:i') != $timestamp->format('Y-m-d H:i'))) {
-                    $case->$field = $timestamp;
-                    $dirty = true;
-                    Log::info('Update timestamp form history');
-                }
-            }
+        //     foreach (['encountered_at', 'dismissed_at'] as $field) {
+        //         $timestamp = Carbon::parse($patient[$field], 'asia/bangkok')->tz('utc');
+        //         if ((! $case->$field) || ($case->$field->format('Y-m-d H:i') != $timestamp->format('Y-m-d H:i'))) {
+        //             $case->$field = $timestamp;
+        //             $dirty = true;
+        //             Log::info('Update timestamp form history');
+        //         }
+        //     }
 
-            if ($dirty) {
-                $case->save();
-                Log::info('Need Sync : '.$case->no);
-                if ($case->medicine) {
-                    $medicineCases[] = $case;
-                }
-            }
-        }
+        //     if ($dirty) {
+        //         $case->save();
+        //         Log::info('Need Sync : '.$case->no);
+        //         if ($case->medicine) {
+        //             $medicineCases[] = $case;
+        //         }
+        //     }
+        // }
 
-        if (count($medicineCases)) {
-            //update
-        }
+        // if (count($medicineCases)) {
+        //     //update
+        // }
     }
 
     public static function monitor()
@@ -203,5 +208,19 @@ class Venti
         $monitor[] = $now;
         Cache::put('venti-monitor', $monitor);
         Log::critical('venti not update for '.count($monitor).' iterations');
+    }
+
+    public static function rotateCase()
+    {
+        $case = VentiRecord::select(['hn', 'no'])
+                           ->whereMedicine(true)
+                           ->whereNull('dismissed_at')
+                           ->orderBy('updated_at')
+                           ->first();
+        if (! $case) {
+            return ['hn' => false];
+        }
+
+        return $case;
     }
 }

@@ -15,21 +15,22 @@ class CreateVentiRecordsTable extends Migration
     {
         Schema::create('venti_records', function (Blueprint $table) {
             $table->id();
-            $table->string('no', 20)->unique();
-            $table->string('bed', 20)->nullable();
-            $table->string('hn', 20)->index()->nullable();
-            $table->string('name')->index()->nullable();
-            $table->boolean('medicine')->index();
-            $table->string('cc')->index()->nullable();
-            $table->string('dx')->index()->nullable();
-            $table->string('movement')->index()->nullable();
-            $table->string('counter', 20)->index()->nullable();
-            $table->string('insurance')->index()->nullable();
-            $table->string('outcome')->index()->nullable();
-            $table->string('remark')->nullable();
-            $table->timestamp('encountered_at')->index()->nullable();
-            $table->timestamp('dismissed_at')->index()->nullable();
-            $table->timestamp('tagged_med_at')->index()->nullable();
+            $table->string('no', 20)->unique(); // er-queue
+            $table->string('en', 20)->index()->nullable(); // profile
+            $table->string('location')->nullable(); // profile
+            $table->string('hn', 20)->index()->nullable(); // er-queue
+            $table->string('name')->index()->nullable(); // er-queue
+            $table->boolean('medicine')->index(); // er-queue
+            $table->string('cc')->index()->nullable(); // profile
+            $table->string('dx')->index()->nullable(); // profile
+            $table->string('triage', 512)->nullable(); // profile
+            $table->string('counter', 20)->index()->nullable(); // er-queue
+            $table->string('insurance')->index()->nullable(); // profile
+            $table->string('outcome')->index()->nullable(); // history
+            $table->string('remark')->nullable(); // er-queue
+            $table->timestamp('encountered_at')->index()->nullable(); // er-queue
+            $table->timestamp('dismissed_at')->index()->nullable(); // er-queue
+            $table->timestamp('tagged_med_at')->index()->nullable(); // er-queue
             $table->timestamps();
         });
     }

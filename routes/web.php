@@ -85,6 +85,10 @@ Route::post('/dudes/venti/history', function () {
     return ['backto' => 'future'];
 });
 
+Route::post('/dudes/venti/hn', function () {
+    return App\Venti::rotateCase();
+});
+
 Route::post('/dudes/{form}/{key}', function ($form, $key) {
     DudeForm::create(['key' => $key, 'form' => $form, 'content' => Request::all()]);
 
