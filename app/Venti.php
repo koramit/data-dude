@@ -30,6 +30,7 @@ class Venti
                                ->whereNull('dismissed_at')
                                ->get();
 
+            Log::debug($case);
             if ($case->count() > 1) {
                 Log::critical('MULTIPLE CASES OF A HN AT THE SAMETIME!!!');
                 continue;
@@ -55,11 +56,11 @@ class Venti
                 }
                 try {
                     $case = VentiRecord::create($patient);
+                    $case->needSync = true;
                 } catch (Exception $e) {
                     Log::error('create case error');
                     Log::error($patient);
                 }
-                $case->needSync = true;
             } else { // old case - update
                 $updates = false;
                 foreach ($patient as $key => $value) {
