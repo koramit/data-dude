@@ -27,6 +27,7 @@ class CreateVentiRecordsTable extends Migration
             $table->string('counter', 20)->index()->nullable(); // er-queue
             $table->string('insurance')->index()->nullable(); // profile
             $table->string('outcome')->index()->nullable(); // history
+            $table->string('vital_signs')->nullable(); // profile
             $table->string('remark')->nullable(); // er-queue
             $table->timestamp('encountered_at')->index()->nullable(); // er-queue
             $table->timestamp('dismissed_at')->index()->nullable(); // er-queue

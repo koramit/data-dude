@@ -65,9 +65,6 @@ class Venti
                 foreach ($patient as $key => $value) {
                     if ($case->$key != $value) {
                         Log::info($patient);
-                        // if ($key == 'dx') {
-                        //     Log::info('event dx change '.$case->no.' : '.$case->$key.' => '.$value);
-                        // }
                         $case->$key = $value;
                         $updates = true;
                         if ($key == 'medicine' && $value) {
@@ -221,6 +218,35 @@ class Venti
             return ['hn' => false];
         }
 
+        $case->touch();
+
         return $case;
+    }
+
+    public static function profile($profile)
+    {
+        $case = VentiRecord::whereNo($profile['no'])->whereHn($profile['hn'])->first();
+
+        if (! $case) {
+            return;
+        }
+
+        unset($profile['found']);
+        unset($profile['encountered_at']);
+        unset($profile['hn']);
+        unset($profile['no']);
+
+        $updates = false;
+        foreach ($profile as $key => $value) {
+            if ($case->$key != $value) {
+                Log::info($profile);
+                $case->$key = $value;
+                $updates = true;
+            }
+        }
+
+        if ($updates) {
+            $case->save();
+        }
     }
 }
