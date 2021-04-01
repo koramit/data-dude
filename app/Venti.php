@@ -14,20 +14,34 @@ class Venti
     {
         $medicineCases = [];
         foreach ($patients as $patient) {
-            // if no hn in DB or hn discharged then create new case
-            $case = VentiRecord::whereHn($patient['hn'])
-                               ->whereNull('dismissed_at')
-                               ->first();
+            // Sometime, there are more than one case for a HN at the same time
+            // maybe Human error so, we have to use encounter date for
+            // detecting a specific case because just HN and
+            // not discharge yet is not enough
             $los = explode(':', $patient['los']);
             unset($patient['los']);
-
             $minutes = (((int) $los[0]) ?? 0) * 60;
             $minutes += (((int) $los[1]) ?? 0);
-            $encounteredAt = now()->addMinutes($minutes * -1);
+            $minutes = $minutes < 0 ? 0 : ($minutes * -1);
+            $encounteredAt = now()->addMinutes($minutes);
 
-            if (! $case) { // double check on new ase
-                $case = VentiRecord::where('no', 'like', $encounteredAt->format('ymdH').'%'.$patient['hn'])->first();
+            // if no hn in DB or hn discharged then create new case
+            $case = VentiRecord::where('no', 'like', $encounteredAt->format('ymdH').'%'.$patient['hn'])
+                               ->whereNull('dismissed_at')
+                               ->get();
+
+            if ($case->count() > 1) {
+                Log::critical('MULTIPLE CASES OF A HN AT THE SAMETIME!!!');
+                continue;
+            } elseif ($case->count() === 1) {
+                $case = $case[0];
+            } else {
+                $case = null;
             }
+
+            // if (! $case) { // double check on new ase
+            //     $case = VentiRecord::where('no', 'like', $encounteredAt->format('ymdH').'%'.$patient['hn'])->first();
+            // }
 
             if (! $case) { // new case - create
                 $patient += [
@@ -50,6 +64,7 @@ class Venti
                 $updates = false;
                 foreach ($patient as $key => $value) {
                     if ($case->$key != $value) {
+                        Log::info($patient);
                         if ($key == 'dx') {
                             Log::info('event dx change '.$case->no.' : '.$case->$key.' => '.$value);
                         }
