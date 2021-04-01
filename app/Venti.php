@@ -31,6 +31,8 @@ class Venti
                                ->get();
 
             Log::debug($case);
+            Log::debug($encounteredAt->format('ymdH').'%'.$patient['hn']);
+
             if ($case->count() > 1) {
                 Log::critical('MULTIPLE CASES OF A HN AT THE SAMETIME!!!');
                 continue;
