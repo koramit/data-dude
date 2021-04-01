@@ -209,8 +209,7 @@ class Venti
 
     public static function rotateCase()
     {
-        $case = VentiRecord::select(['hn', 'no'])
-                           ->whereMedicine(true)
+        $case = VentiRecord::whereMedicine(true)
                            ->whereNull('dismissed_at')
                            ->orderBy('updated_at')
                            ->first();
@@ -218,9 +217,9 @@ class Venti
             return ['hn' => false];
         }
 
-        $case->update(['updated_at' => now()]);
+        $case->touch();
 
-        return $case;
+        return ['hn' => $case->hn, 'no' => $case->no];
     }
 
     public static function profile($profile)

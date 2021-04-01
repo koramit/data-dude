@@ -49,7 +49,7 @@ const pushProfile = function (profile) {
         return;
     }
 
-    fetch('http://172.21.106.10:7070/dudes/venti/hn', {
+    fetch('http://172.21.106.10:7070/dudes/venti/profile', {
         method: 'post',
         headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
         body: JSON.stringify({ "profile": profile })
@@ -60,4 +60,4 @@ const pushProfile = function (profile) {
     });
 }
 
-setInterval(() => fetchHn().then(grabProfile).then(pushProfile), 30000)
+setInterval(() => fetchHn().then(grabProfile).then(pushProfile), 60000)
