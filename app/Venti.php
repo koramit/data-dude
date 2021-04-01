@@ -65,9 +65,9 @@ class Venti
                 foreach ($patient as $key => $value) {
                     if ($case->$key != $value) {
                         Log::info($patient);
-                        if ($key == 'dx') {
-                            Log::info('event dx change '.$case->no.' : '.$case->$key.' => '.$value);
-                        }
+                        // if ($key == 'dx') {
+                        //     Log::info('event dx change '.$case->no.' : '.$case->$key.' => '.$value);
+                        // }
                         $case->$key = $value;
                         $updates = true;
                         if ($key == 'medicine' && $value) {
