@@ -44,10 +44,20 @@ const grabProfile = async function (stay) {
 }
 
 const pushProfile = function (profile) {
-    console.log(profile);
-    document.querySelector('div.sidenav-item:nth-child(2)').click();
+    if (! profile.found) {
+        document.querySelector('div.sidenav-item:nth-child(2)').click();
+        return;
+    }
+
+    fetch('http://172.21.106.10:7070/dudes/venti/hn', {
+        method: 'post',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ "profile": profile })
+    }).then(res => res.json())
+    .then(data => {
+        console.log(data);
+        document.querySelector('div.sidenav-item:nth-child(2)').click();
+    });
 }
 
 setInterval(() => fetchHn().then(grabProfile).then(pushProfile), 30000)
-
-document.querySelector('div.sidenav-item:nth-child(2)').click();

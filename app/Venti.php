@@ -218,7 +218,7 @@ class Venti
             return ['hn' => false];
         }
 
-        $case->touch();
+        $case->update(['updated_at' => now()]);
 
         return $case;
     }
