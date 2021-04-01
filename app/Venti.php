@@ -30,9 +30,6 @@ class Venti
                                ->whereNull('dismissed_at')
                                ->get();
 
-            Log::debug($case);
-            Log::debug($encounteredAt->format('ymdH').'%'.$patient['hn']);
-
             if ($case->count() > 1) {
                 Log::critical('MULTIPLE CASES OF A HN AT THE SAMETIME!!!');
                 continue;
@@ -41,10 +38,6 @@ class Venti
             } else {
                 $case = null;
             }
-
-            // if (! $case) { // double check on new ase
-            //     $case = VentiRecord::where('no', 'like', $encounteredAt->format('ymdH').'%'.$patient['hn'])->first();
-            // }
 
             if (! $case) { // new case - create
                 $patient += [
@@ -60,8 +53,7 @@ class Venti
                     $case = VentiRecord::create($patient);
                     $case->needSync = true;
                 } catch (Exception $e) {
-                    Log::error('create case error');
-                    Log::error($patient);
+                    Log::error('create case error => '.$patient['no']);
                     continue;
                 }
             } else { // old case - update
@@ -86,8 +78,7 @@ class Venti
                         $case->needSync = true;
                     }
                 } catch (Exception $e) {
-                    Log::error('update case error');
-                    Log::error($patient);
+                    Log::error('update case error => '.$case->no);
                     continue;
                 }
             }
