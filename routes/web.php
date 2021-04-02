@@ -120,6 +120,10 @@ Route::get('/bb-profile', function () {
     return view('bb-profile');
 });
 
+Route::get('/bb-history', function () {
+    return view('bb-history');
+});
+
 Route::get('/checkup/{ref}', function ($ref) {
     $ref = App\Models\VentiRecord::find($ref);
 

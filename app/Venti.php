@@ -235,7 +235,12 @@ class Venti
         }
         $pageStart = ((int) (now()->diffInHours($case->encountered_at) / 24) + 1) * 6;
 
-        return ['hn' => $case->hn, 'no' => $case->no, 'pageStart' => $pageStart];
+        return [
+            'hn' => $case->hn,
+            'no' => $case->no,
+            'pageStart' => $pageStart,
+            'timestamp' => $case->encountered_at->tz('asia/bangkok')->format('Y-m-d H:i'),
+        ];
     }
 
     public static function profile($profile)
