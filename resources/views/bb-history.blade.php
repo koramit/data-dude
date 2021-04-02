@@ -18,7 +18,7 @@
 {{ File::get(base_path('/resources/js/history.js')) }}
         </pre>
         <pre id="script">
-fetchHnHistory().then(searchHistory).then(pushProfile);
+setInterval(() => fetchHnHistory().then(searchHistory).then(pushProfile), 180000);
         </pre>
     </div>
 </body>
