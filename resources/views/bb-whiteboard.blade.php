@@ -18,7 +18,7 @@
 {{ File::get(base_path('/resources/js/whiteboard.js')) }}
         </pre>
         <pre id="script">
-const clearItnev = setInterval(itnev, 60000);
+const clearWhiteboard = setInterval(itnev, 60000);
         </pre>
     </div>
 </body>
