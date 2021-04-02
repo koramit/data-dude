@@ -108,8 +108,12 @@ Route::get('/venti/{id}', function ($id) {
     return App\Models\VentiRecord::find($id);
 });
 
-Route::get('/code', function () {
-    return view('code');
+Route::get('/bb-whiteboard', function () {
+    return view('bb-whiteboard');
+});
+
+Route::get('/bb-profile', function () {
+    return view('bb-profile');
 });
 
 Route::get('/checkup/{ref}', function ($ref) {
