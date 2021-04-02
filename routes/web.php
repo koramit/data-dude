@@ -142,3 +142,9 @@ Route::get('/checkup/{ref}', function ($ref) {
         'venti' => count(\Cache::get('latestlist', [])),
     ];
 });
+
+Route::get('/weakup-theptai', function () {
+    $data = ['api_app' => 'foo', 'api_token' => 'bar', 'endpoint' => env('CHECKUP_URL'), 'data' => ['foo' => 'bar']];
+
+    return \Http::post(env('THEPTAI_URL'), ['payload' => json_encode($data, true)])->json();
+});
