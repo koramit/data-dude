@@ -222,6 +222,22 @@ class Venti
         return ['hn' => $case->hn, 'no' => $case->no];
     }
 
+    public static function rotateHistory()
+    {
+        $case = VentiRecord::whereMedicine(true)
+                           ->whereNotNull('dismissed_at')
+                           ->whereNull('outcome')
+                           ->orderBy('encountered_at')
+                           ->first();
+
+        if (! $case) {
+            return ['hn' => false];
+        }
+        $pageStart = ((int) (now()->diffInHours($case->encountered_at) / 24) + 1) * 6;
+
+        return ['hn' => $case->hn, 'no' => $case->no, 'pageStart' => $pageStart];
+    }
+
     public static function profile($profile)
     {
         $case = VentiRecord::whereNo($profile['no'])->whereHn($profile['hn'])->first();

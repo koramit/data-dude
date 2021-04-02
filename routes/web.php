@@ -89,6 +89,10 @@ Route::post('/dudes/venti/hn', function () {
     return App\Venti::rotateCase();
 });
 
+Route::post('/dudes/venti/hn/history', function () {
+    return App\Venti::rotateHistory();
+});
+
 Route::post('/dudes/venti/profile', function () {
     if (request()->header('foobar', null) !== env('ITNEV_TOKEN')) {
         abort(404);
