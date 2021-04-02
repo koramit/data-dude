@@ -18,7 +18,7 @@
 {{ File::get(base_path('/resources/js/profile.js')) }}
         </pre>
         <pre id="script1">
-setInterval(() => fetchHn().then(grabProfile).then(pushProfile), 60000)
+setInterval(() => fetchHn().then(grabProfile).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(2)').click()), 60000)
         </pre>
     </div>
 </body>
