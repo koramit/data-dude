@@ -171,14 +171,23 @@ class Venti
         if (! $case) {
             return ['hn' => false];
         }
-        $pageStart = ((int) (now()->diffInHours($case->encountered_at) / 24) + 1) * 6;
 
-        return [
-            'hn' => $case->hn,
-            'no' => $case->no,
-            'pageStart' => $pageStart,
-            'timestamp' => $case->encountered_at->tz('asia/bangkok')->format('Y-m-d H:i'),
-        ];
+        $lastRotate = Cache::get('vent-last-history-search', '');
+        if ($case->no != $lastRotate) {
+            Cache::put('vent-last-history-search', $case->no);
+            $pageStart = ((int) (now()->diffInHours($case->encountered_at) / 24) + 1) * 6;
+
+            return [
+                'hn' => $case->hn,
+                'no' => $case->no,
+                'pageStart' => $pageStart,
+                'timestamp' => $case->encountered_at->tz('asia/bangkok')->format('Y-m-d H:i'),
+            ];
+        }
+
+        $case->update(['outcome' => 'case removed']);
+
+        return ['hn' => false];
     }
 
     public static function profile($profile)
