@@ -3,7 +3,6 @@
 namespace App;
 
 use App\Models\VentiRecord;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -110,67 +109,6 @@ class Venti
     public static function future($patients)
     {
         return [];
-        // $medicineCases = [];
-        // foreach ($patients as $patient) {
-        //     $case = VentiRecord::whereHn($patient['hn'])
-        //                        ->whereNull('dismissed_at')
-        //                        ->first();
-
-        //     // add case to history if its not exists
-        //     $history = Cache::get('venti-history', collect([]));
-        //     if (! $case) {
-        //         $dismissedAt = Carbon::parse($patient['dismissed_at'], 'asia/bangkok')->tz('utc');
-        //         $old = VentiRecord::whereHn($patient['hn'])
-        //                           ->whereDismissedAt($dismissedAt)
-        //                           ->first();
-        //         if ($old) { // case already exists and discharged
-        //             continue;
-        //         }
-
-        //         $old = $history->firstWhere('hn', $patient['hn']);
-        //         if (! $old) {
-        //             $history->push($patient);
-        //             Cache::put('venti-history', $history);
-        //         }
-        //         continue;
-        //     }
-
-        //     // case found - remove it from history cache
-        //     $history = $history->filter(function ($record) use ($patient) {
-        //         return $record['hn'] != $patient['hn'];
-        //     });
-        //     Cache::put('venti-history', $history);
-
-        //     // update case
-        //     $dirty = false;
-        //     foreach (['movement', 'cc', 'dx', 'insurance', 'outcome'] as $field) {
-        //         if ($patient[$field] && ($patient[$field] != '') && ($case->$field != $patient[$field])) {
-        //             $case->$field = $patient[$field];
-        //             $dirty = true;
-        //         }
-        //     }
-
-        //     foreach (['encountered_at', 'dismissed_at'] as $field) {
-        //         $timestamp = Carbon::parse($patient[$field], 'asia/bangkok')->tz('utc');
-        //         if ((! $case->$field) || ($case->$field->format('Y-m-d H:i') != $timestamp->format('Y-m-d H:i'))) {
-        //             $case->$field = $timestamp;
-        //             $dirty = true;
-        //             Log::info('Update timestamp form history');
-        //         }
-        //     }
-
-        //     if ($dirty) {
-        //         $case->save();
-        //         Log::info('Need Sync : '.$case->no);
-        //         if ($case->medicine) {
-        //             $medicineCases[] = $case;
-        //         }
-        //     }
-        // }
-
-        // if (count($medicineCases)) {
-        //     //update
-        // }
     }
 
     public static function monitor()

@@ -17,7 +17,7 @@ const searchHistory = async function(stay) {
     }
 
     [...document.querySelectorAll('div.mat-select-trigger')].pop().click();
-    await sleep(2000);
+    await sleep(5000);
     let pages = document.querySelector('div.mat-select-content').querySelectorAll('mat-option');
     let pageNo = stay.pageStart - 1;
     let found = false;
@@ -25,7 +25,7 @@ const searchHistory = async function(stay) {
     let outcome;
 
     pages[pageNo].click();
-    await sleep(2000);
+    await sleep(5000);
     let firstRow = document.querySelector('mat-row');
     let firstDate = firstRow.querySelector('mat-cell.mat-column-Check-in').textContent.trim();
     let firstTime = firstRow.querySelector('mat-cell.mat-column-Check-in-time').textContent.trim();
@@ -35,7 +35,7 @@ const searchHistory = async function(stay) {
     if (dateRef < dateStart) {
         while(! found && pageNo < stay.pageStart + 20) {
             pages[pageNo].click();
-            await sleep(2000);
+            await sleep(5000);
             let list = document.querySelectorAll('mat-row');
             for(i = 0; i < list.length; i++) {
                 if (list[i].querySelector('mat-cell.mat-column-hn').textContent == stay.hn) {
@@ -50,7 +50,7 @@ const searchHistory = async function(stay) {
     } else {
         while(! found && pageNo > stay.pageStart - 20) {
             pages[pageNo].click();
-            await sleep(2000);
+            await sleep(5000);
             let list = document.querySelectorAll('mat-row');
             for(i = 0; i < list.length; i++) {
                 if (list[i].querySelector('mat-cell.mat-column-hn').textContent == stay.hn) {
@@ -71,7 +71,7 @@ const searchHistory = async function(stay) {
     }
 
     foundNode.click();
-    await sleep(3000);
+    await sleep(5000);
     let events = [...document.querySelectorAll('div.event')];
     profile.found = true;
     profile.no = stay.no;

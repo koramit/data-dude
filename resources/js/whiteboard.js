@@ -28,6 +28,8 @@ const itnev = function () {
         return patient;
     });
 
+    console.log('cases count : ' + patients.length);
+
     fetch('http://172.21.106.10:7070/dudes/venti', {
         method: 'post',
         headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
