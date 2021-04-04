@@ -2,6 +2,7 @@
 
 use App\Models\Dude;
 use App\Models\DudeForm;
+use App\Models\VentiRecord;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
@@ -151,4 +152,12 @@ Route::get('/weakup-theptai', function () {
     $data = ['api_app' => 'foo', 'api_token' => 'bar', 'endpoint' => env('CHECKUP_URL'), 'data' => ['foo' => 'bar']];
 
     return \Http::post(env('THEPTAI_URL'), ['payload' => json_encode($data, true)])->json();
+});
+
+Route::get('/venti-records/{passcode}', function ($passcode) {
+    if ($passcode !== env('ITNEV_TOKEN')) {
+        abort(404);
+    }
+
+    return VentiRecord::all();
 });
