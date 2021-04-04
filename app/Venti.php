@@ -201,7 +201,7 @@ class Venti
         $updates = false;
 
         if (isset($profile['dismissed_at'])) {
-            $case->dismissed_at = Carbon::parse($profile['dismissed_at'], 'asia/bangkok');
+            $case->dismissed_at = Carbon::parse($profile['dismissed_at'], 'asia/bangkok')->tz('UTC');
             $updates = true;
             unset($profile['dismissed_at']);
         }
