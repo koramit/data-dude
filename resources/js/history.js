@@ -23,6 +23,7 @@ const searchHistory = async function(stay) {
     let found = false;
     let foundNode;
     let outcome;
+    let dismissedAt;
 
     pages[pageNo].click();
     await sleep(5000);
@@ -57,6 +58,7 @@ const searchHistory = async function(stay) {
                     found = true;
                     foundNode = list[i];
                     outcome = list[i].querySelector('mat-cell.mat-column-dispose').textContent;
+                    dismissedAt = list[i].querySelector('mat-cell.mat-column-Check-out').textContent + ' ' + list[i].querySelector('mat-cell.mat-column-Check-out-time').textContent;
                     break;
                 }
             }
@@ -76,6 +78,7 @@ const searchHistory = async function(stay) {
     profile.found = true;
     profile.no = stay.no;
     profile.outcome = outcome;
+    profile.dismissed_at = dismissedAt;
     profile.hn = document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(2)').textContent.replaceAll("\n", ' | ').replace('HN : ', '').replace(' Search HN', '').trim();
     profile.en = document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(3)').textContent.replaceAll("\n", ' | ').replace('EN : ', '').trim();
     profile.encountered_at = events.pop().querySelector('div.timestamp').textContent.replaceAll("\n", ' | ').trim();

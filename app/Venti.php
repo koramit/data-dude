@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\VentiRecord;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -135,6 +136,7 @@ class Venti
         $monitor[] = $now;
         Cache::put('venti-monitor', $monitor);
         Log::critical('venti not update for '.count($monitor).' iterations');
+
         return 'need attention';
     }
 
@@ -197,9 +199,15 @@ class Venti
         unset($profile['no']);
 
         $updates = false;
+
+        if (isset($profile['dismissed_at'])) {
+            $case->dismissed_at = Carbon::parse($profile['dismissed_at'], 'asia/bangkok');
+            $updates = true;
+            unset($profile['dismissed_at']);
+        }
+
         foreach ($profile as $key => $value) {
             if ($case->$key != $value) {
-                Log::info($profile);
                 $case->$key = $value;
                 $updates = true;
             }
@@ -207,6 +215,7 @@ class Venti
 
         if ($updates) {
             $case->save();
+            // TODO sync
         }
     }
 }
