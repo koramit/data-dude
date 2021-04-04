@@ -164,8 +164,15 @@ class Venti
                            ->first();
 
         if (! $case) {
-            // TODO try search 'outcome' => 'case removed' in case of accidently DC from whiteboard
-            return ['hn' => false];
+            // search 'outcome' => 'case removed' in case of accidently DC from whiteboard
+            $case = VentiRecord::whereOutcome('case removed')
+                               ->orderByDesc('medicine')
+                               ->orderBy('encountered_at')
+                               ->first();
+
+            if (! $case) {
+                return ['hn' => false];
+            }
         }
 
         $lastRotate = Cache::get('vent-last-history-search', '');
