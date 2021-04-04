@@ -21,7 +21,7 @@ const grabProfile = async function (stay) {
     }
     let node = nodes[0];
     node.click();
-    await sleep(5000);
+    await sleep(10000);
     let events = [...document.querySelectorAll('div.event')];
     profile.found = true;
     profile.no = stay.no;

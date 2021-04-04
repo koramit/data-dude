@@ -26,7 +26,7 @@ const searchHistory = async function(stay) {
     let dismissedAt;
 
     pages[pageNo].click();
-    await sleep(5000);
+    await sleep(6000);
     let firstRow = document.querySelector('mat-row');
     let firstDate = firstRow.querySelector('mat-cell.mat-column-Check-in').textContent.trim();
     let firstTime = firstRow.querySelector('mat-cell.mat-column-Check-in-time').textContent.trim();
@@ -36,7 +36,7 @@ const searchHistory = async function(stay) {
     if (dateRef < dateStart) {
         while(! found && pageNo < stay.pageStart + 20) {
             pages[pageNo].click();
-            await sleep(5000);
+            await sleep(6000);
             let list = document.querySelectorAll('mat-row');
             for(i = 0; i < list.length; i++) {
                 if (list[i].querySelector('mat-cell.mat-column-hn').textContent == stay.hn) {
@@ -51,7 +51,7 @@ const searchHistory = async function(stay) {
     } else {
         while(! found && pageNo > stay.pageStart - 20) {
             pages[pageNo].click();
-            await sleep(5000);
+            await sleep(6000);
             let list = document.querySelectorAll('mat-row');
             for(i = 0; i < list.length; i++) {
                 if (list[i].querySelector('mat-cell.mat-column-hn').textContent == stay.hn) {
@@ -73,7 +73,7 @@ const searchHistory = async function(stay) {
     }
 
     foundNode.click();
-    await sleep(5000);
+    await sleep(10000);
     let events = [...document.querySelectorAll('div.event')];
     profile.found = true;
     profile.no = stay.no;
