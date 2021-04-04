@@ -108,6 +108,10 @@ Route::post('/dudes/{form}/{key}', function ($form, $key) {
     return 'ok';
 });
 
+Route::get('/venti/monitor', function () {
+    return App\Venti::monitor();
+});
+
 Route::get('/venti/{id}', function ($id) {
     return App\Models\VentiRecord::find($id);
 });

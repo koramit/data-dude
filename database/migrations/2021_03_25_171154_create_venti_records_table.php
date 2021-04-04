@@ -29,8 +29,9 @@ class CreateVentiRecordsTable extends Migration
             $table->string('outcome')->index()->nullable(); // history
             $table->string('vital_signs')->nullable(); // profile
             $table->string('remark')->nullable(); // er-queue
+            $table->boolean('need_sync')->default(false)->index();
             $table->timestamp('encountered_at')->index()->nullable(); // er-queue
-            $table->timestamp('dismissed_at')->index()->nullable(); // er-queue
+            $table->timestamp('dismissed_at')->index()->nullable(); // er-queue, recheck at history
             $table->timestamp('tagged_med_at')->index()->nullable(); // er-queue
             $table->timestamps();
         });

@@ -11,7 +11,6 @@ class Venti
 {
     public static function itnev($patients)
     {
-        $medicineCases = [];
         foreach ($patients as $patient) {
             // Sometime, there are more than one case for a HN at the same time
             // maybe Human error so, we have to use encounter date for
@@ -50,11 +49,11 @@ class Venti
                 if ($patient['medicine']) {
                     $patient += [
                         'tagged_med_at' => $encounteredAt,
+                        'need_sync' => true, // sync med case only
                     ];
                 }
                 try {
                     $case = VentiRecord::create($patient);
-                    $case->needSync = true;
                 } catch (Exception $e) {
                     Log::error('create case error => '.$patient['no']);
                     continue;
@@ -63,47 +62,40 @@ class Venti
                 $updates = false;
                 foreach ($patient as $key => $value) {
                     if ($case->$key != $value) {
-                        Log::info($patient);
                         $case->$key = $value;
                         $updates = true;
                         if ($key == 'medicine' && $value) {
-                            Log::info('event case tagged med '.$case->no);
                             $case->tagged_med_at = now();
                         }
                     }
                 }
                 try {
                     if ($updates) {
+                        $case->need_sync = true; // tag sync to all updated cases
                         $case->save();
-                        $case->needSync = true;
                     }
                 } catch (Exception $e) {
                     Log::error('update case error => '.$case->no);
                     continue;
                 }
             }
-
-            if ($case->medicine) {
-                $medicineCases[] = $case;
-            }
         }
 
+        // dismiss cases thoses removed from whiteboard
         $list = collect($patients)->pluck('hn')->toArray();
         Cache::put('latestlist', $list);
-        foreach ($medicineCases as $case) {
-            if ($case->needSync) {
-                Log::info('Need Sync : '.$case->no);
-            }
-        }
+        VentiRecord::whereNull('dismissed_at')
+                   ->whereNotIn('hn', $list)
+                   ->get()
+                   ->each(function ($case) {
+                       $case->dismissed_at = now();
+                       if ($case->medicine) {
+                           $case->need_sync = true;
+                       }
+                       $case->save();
+                   });
 
-        $cases = VentiRecord::whereNull('dismissed_at')->whereNotIn('hn', $list)->get();
-
-        foreach ($cases as $case) {
-            $case->update(['dismissed_at' => now()]);
-            Log::info('DC from er-queue '.$case->no);
-        }
-
-        static::monitor();
+        // TODO sync data
     }
 
     public static function future($patients)
@@ -126,7 +118,7 @@ class Venti
             $monitor[] = $now;
             Cache::put('venti-monitor', $monitor);
 
-            return;
+            return 'ok';
         }
 
         if ($monitor[0]['cases'] != $now['cases'] ||
@@ -137,12 +129,13 @@ class Venti
         ) {
             Cache::put('venti-monitor', []);
 
-            return;
+            return 'ok';
         }
 
         $monitor[] = $now;
         Cache::put('venti-monitor', $monitor);
         Log::critical('venti not update for '.count($monitor).' iterations');
+        return 'need attention';
     }
 
     public static function rotateCase()
