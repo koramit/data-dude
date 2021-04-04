@@ -40,3 +40,5 @@ const itnev = function () {
         console.log(data);
     });
 }
+
+const clearWhiteboard = setInterval(itnev, 60000);

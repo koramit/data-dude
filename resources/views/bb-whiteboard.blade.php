@@ -12,13 +12,9 @@
     <h1>Whiteboard</h1>
     <input type="password" id="secret">
     <button onclick="copyCode()">copy code</button> <br> <br>
-    <button onclick="copyToClipboard(document.getElementById('script').textContent.trim())">copy script</button> <br>
     <div style="color: white;">
         <pre id="code">
 {{ File::get(base_path('/resources/js/whiteboard.js')) }}
-        </pre>
-        <pre id="script">
-const clearWhiteboard = setInterval(itnev, 60000);
         </pre>
     </div>
 </body>

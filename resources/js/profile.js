@@ -59,3 +59,5 @@ const pushProfile = function (profile) {
         document.querySelector('div.sidenav-item:nth-child(2)').click();
     });
 }
+
+const clearProfile = setInterval(() => fetchHn().then(grabProfile).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(2)').click()), 60000);

@@ -12,13 +12,9 @@
     <h1>Profile</h1>
     <input type="password" id="secret">
     <button onclick="copyCode()">copy code</button> <br> <br>
-    <button onclick="copyToClipboard(document.getElementById('script1').textContent.trim())">copy script</button> <br>
     <div style="color: white;">
         <pre id="code">
 {{ File::get(base_path('/resources/js/profile.js')) }}
-        </pre>
-        <pre id="script1">
-const clearProfile = setInterval(() => fetchHn().then(grabProfile).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(2)').click()), 60000);
         </pre>
     </div>
 </body>

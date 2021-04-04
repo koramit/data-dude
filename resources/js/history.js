@@ -113,3 +113,5 @@ const pushProfile = function (profile) {
         return 1;
     });
 }
+
+const clearHistory = setInterval(() => fetchHnHistory().then(searchHistory).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click()), 180000);

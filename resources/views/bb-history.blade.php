@@ -12,13 +12,9 @@
     <h1>History</h1>
     <input type="password" id="secret">
     <button onclick="copyCode()">copy code</button> <br> <br>
-    <button onclick="copyToClipboard(document.getElementById('script').textContent.trim())">copy script</button> <br>
     <div style="color: white;">
         <pre id="code">
 {{ File::get(base_path('/resources/js/history.js')) }}
-        </pre>
-        <pre id="script">
-const clearHistory = setInterval(() => fetchHnHistory().then(searchHistory).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click()), 180000);
         </pre>
     </div>
 </body>
