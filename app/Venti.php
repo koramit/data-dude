@@ -142,8 +142,8 @@ class Venti
 
     public static function rotateCase()
     {
-        $case = VentiRecord::whereMedicine(true)
-                           ->whereNull('dismissed_at')
+        $case = VentiRecord::whereNull('dismissed_at')
+                           ->orderByDesc('medicine')
                            ->orderBy('updated_at')
                            ->first();
         if (! $case) {
@@ -157,13 +157,14 @@ class Venti
 
     public static function rotateHistory()
     {
-        $case = VentiRecord::whereMedicine(true)
-                           ->whereNotNull('dismissed_at')
+        $case = VentiRecord::whereNotNull('dismissed_at')
                            ->whereNull('outcome')
+                           ->orderByDesc('medicine')
                            ->orderBy('encountered_at')
                            ->first();
 
         if (! $case) {
+            // TODO try search 'outcome' => 'case removed' in case of accidently DC from whiteboard
             return ['hn' => false];
         }
 
