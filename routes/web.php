@@ -161,3 +161,21 @@ Route::get('/venti-records/{passcode}', function ($passcode) {
 
     return VentiRecord::all();
 });
+
+Route::get('/hey-smuggle', function () {
+    try {
+        Http::timeout(8)
+            ->withHeaders([
+                'Accept' => 'application/json',
+                'token' => env('STOKEN'),
+                'secret' => env('SSECRET'), ])
+            ->post(env('SURL'), [
+                'function' => 'user',
+                'org_id' => 10023456, ])
+            ->json();
+
+        return "OK\n";
+    } catch (\Exception $e) {
+        return "not OK\n";
+    }
+});

@@ -225,22 +225,25 @@ class Venti
         }
 
         if ($updates) {
-            $case->need_sync = true;
+            $case->need_sync = true; // tag sync then, it will sync in whitlboard handler
             $case->save();
-            // TODO sync
         }
     }
 
-    public static function syncVenti($cases)
+    public static function sync($cases)
     {
         $cases = $cases->transform(function ($case) {
+            $triage = $case->clean_triage;
+
             return [
                 'no' => $case->no,
                 'location' => $case->location,
                 'hn' => $case->hn,
                 'cc' => $case->cc,
                 'dx' => $case->dx,
-                'triage' => $case->clean_triage,
+                'via' => $triage['via'] ?? null,
+                'severity' => $triage['severity'] ?? null,
+                'mobility' => $triage['mobility'] ?? null,
                 'counter' => $case->counter,
                 'insurance' => $case->insurance,
                 'outcome' => $case->outcome,
