@@ -6,6 +6,7 @@ use App\Models\VentiRecord;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class Venti
@@ -72,7 +73,9 @@ class Venti
                 }
                 try {
                     if ($updates) {
-                        $case->need_sync = true; // tag sync to all updated cases
+                        if ($case->medicine) {
+                            $case->need_sync = true; // sync med case only
+                        }
                         $case->save();
                     }
                 } catch (Exception $e) {
@@ -91,7 +94,7 @@ class Venti
                    ->each(function ($case) {
                        $case->dismissed_at = now();
                        if ($case->medicine) {
-                           $case->need_sync = true;
+                           $case->need_sync = true; // sync med case only
                        }
                        $case->save();
                    });
@@ -175,9 +178,9 @@ class Venti
             }
         }
 
-        $lastRotate = Cache::get('vent-last-history-search', '');
+        $lastRotate = Cache::get('venti-last-history-search', '');
         if ($case->no != $lastRotate) {
-            Cache::put('vent-last-history-search', $case->no);
+            Cache::put('venti-last-history-search', $case->no);
             $pageStart = ((int) (now()->diffInHours($case->encountered_at) / 24) + 1) * 6;
 
             return [
@@ -222,8 +225,35 @@ class Venti
         }
 
         if ($updates) {
+            $case->need_sync = true;
             $case->save();
             // TODO sync
         }
+    }
+
+    public static function syncVenti($cases)
+    {
+        $cases = $cases->transform(function ($case) {
+            return [
+                'no' => $case->no,
+                'location' => $case->location,
+                'hn' => $case->hn,
+                'cc' => $case->cc,
+                'dx' => $case->dx,
+                'triage' => $case->clean_triage,
+                'counter' => $case->counter,
+                'insurance' => $case->insurance,
+                'outcome' => $case->outcome,
+                'vital_signs' => $case->clean_vital_signs,
+                'remark' => $case->remark,
+                'encountered_at' => $case->encountered_at,
+                'dismissed_at' => $case->dismissed_at,
+                'tagged_med_at' => $case->tagged_med_at,
+            ];
+        });
+
+        return $cases;
+        // $response = Http::withHeaders(['token' => 'tokentoken'])
+        //                 ->post('url', ['cases' => ]);
     }
 }
