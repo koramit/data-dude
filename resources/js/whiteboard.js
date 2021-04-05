@@ -1,4 +1,8 @@
-const itnev = function () {
+const sleep = function (ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+const itnev = async function () {
     let items = [...document.querySelector('div.item-list').querySelectorAll('div.item')];
     let patients = items.map(node => {
         let patient = {};
@@ -39,6 +43,10 @@ const itnev = function () {
     .then(data => {
         console.log(data);
     });
+
+    document.querySelector('div.sidenav-item:nth-child(9)').click();
+    await sleep(20000);
+    document.querySelector('div.sidenav-item:nth-child(2)').click();
 }
 
 const clearWhiteboard = setInterval(itnev, 60000);
