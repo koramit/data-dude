@@ -2,7 +2,7 @@ const sleep = function (ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-const itnev = async function () {
+const grabWhiteboard = async function () {
     let items = [...document.querySelector('div.item-list').querySelectorAll('div.item')];
     let patients = items.map(node => {
         let patient = {};
@@ -13,16 +13,18 @@ const itnev = async function () {
         } else {
             patient.medicine = false;
         }
-        [
+        let fields = [
             { name: 'name'  , selector: 'span.name' },
             { name: 'hn'  , selector: 'span.en' },
             { name: 'counter'  , selector: 'div.zone > p' },
             { name: 'los'  , selector: 'p.time' },
             { name: 'remark'  , selector: 'div.round-rect > p' }
-        ].forEach(field => {
-            let dom = node.querySelector(field.selector);
-            patient[field.name] = (dom && dom !== undefined) ? dom.textContent.replaceAll("\n", '').trim() : null;
-        })
+        ];
+
+        for(i = 0; i < fields.length; i++) {
+            let dom = node.querySelector(fields[i].selector);
+            patient[fields[i].name] = (dom && dom !== undefined) ? dom.textContent.replaceAll("\n", '').trim() : null;
+        }
 
         patient.hn = patient.hn.replace('HN', '');
 
@@ -49,4 +51,4 @@ const itnev = async function () {
     document.querySelector('div.sidenav-item:nth-child(2)').click();
 }
 
-const clearWhiteboard = setInterval(itnev, 60000);
+const clearWhiteboard = setInterval(grabWhiteboard, 60000);
