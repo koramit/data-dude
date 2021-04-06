@@ -88,16 +88,24 @@ class Venti
         // dismiss cases thoses removed from whiteboard
         $list = collect($patients)->pluck('hn')->toArray();
         Cache::put('latestlist', $list);
-        VentiRecord::whereNull('dismissed_at')
-                   ->whereNotIn('hn', $list)
-                   ->get()
-                   ->each(function ($case) {
-                       $case->dismissed_at = now();
-                       if ($case->medicine) {
-                           $case->need_sync = true; // sync med case only
-                       }
-                       $case->save();
-                   });
+        $dismissedCount = VentiRecord::whereNull('dismissed_at')
+                                     ->whereNotIn('hn', $list)
+                                     ->count();
+
+        // it's unusual that there are many cases discharged at the sametime
+        // this breaker prevent massive discharge
+        if ($dismissedCount < 10) {
+            VentiRecord::whereNull('dismissed_at')
+                       ->whereNotIn('hn', $list)
+                       ->get()
+                       ->each(function ($case) {
+                           $case->dismissed_at = now();
+                           if ($case->medicine) {
+                               $case->need_sync = true; // sync med case only
+                           }
+                           $case->save();
+                       });
+        }
 
         // TODO sync data
     }
