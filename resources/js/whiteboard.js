@@ -5,6 +5,10 @@ const sleep = function (ms) {
 const grabWhiteboard = async function () {
     document.querySelector('div.sidenav-item:nth-child(2)').click();
     await sleep(10000);
+    if (document.readyState !== 'complete') {
+        console.log('abort, document not ready');
+        return [];
+    }
 
     let items = [...document.querySelector('div.item-list').querySelectorAll('div.item')];
     let patients = items.map(node => {
@@ -42,13 +46,16 @@ const grabWhiteboard = async function () {
 }
 
 const pushWhiteboard = async function (patients) {
-    return fetch('http://172.21.106.10:7070/dudes/venti', {
-                method: 'post',
-                headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-                body: JSON.stringify({ "patients": patients })
-            })
-            .then(response => response.json())
-            .then(data => console.log(data));
+    if (patients.length) {
+        return fetch('http://172.21.106.10:7070/dudes/venti', {
+                    method: 'post',
+                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ "patients": patients })
+                })
+                .then(response => response.json())
+                .then(data => console.log(data));
+    }
+    return {};
 }
 
 const fetchHn = async function () {
@@ -71,6 +78,11 @@ const grabProfile = async function (stay) {
     let node = nodes[0];
     node.click();
     await sleep(10000);
+    if (document.readyState !== 'complete') {
+        console.log('abort, document not ready');
+        return profile;
+    }
+
     let events = [...document.querySelectorAll('div.event')];
     profile.found = true;
     profile.no = stay.no;
