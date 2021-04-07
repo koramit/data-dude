@@ -86,15 +86,13 @@ class Venti
         }
 
         // dismiss cases thoses removed from whiteboard
+        $oldList = Cache::get('latestlist', []);
         $list = collect($patients)->pluck('hn')->toArray();
         Cache::put('latestlist', $list);
-        $dismissedCount = VentiRecord::whereNull('dismissed_at')
-                                     ->whereNotIn('hn', $list)
-                                     ->count();
 
         // it's unusual that there are many cases discharged at the sametime
         // this breaker prevent massive discharge
-        if ($dismissedCount < 10) {
+        if ((count($oldList) - count($list)) <= env('BREAKER', 5)) {
             VentiRecord::whereNull('dismissed_at')
                        ->whereNotIn('hn', $list)
                        ->get()
