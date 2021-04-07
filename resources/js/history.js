@@ -34,7 +34,7 @@ const searchHistory = async function(stay) {
     let dateStart = new Date(firstDate + ' ' + firstTime);
 
     if (dateRef < dateStart) {
-        while(! found && pageNo < stay.pageStart + 20) {
+        while(! found && pageNo < stay.pageStart + 40) {
             pages[pageNo].click();
             await sleep(6000);
             let list = document.querySelectorAll('mat-row');
@@ -49,7 +49,7 @@ const searchHistory = async function(stay) {
             pageNo++;
         }
     } else {
-        while(! found && pageNo > stay.pageStart - 20) {
+        while(! found && pageNo > stay.pageStart - 40) {
             pages[pageNo].click();
             await sleep(6000);
             let list = document.querySelectorAll('mat-row');
@@ -117,4 +117,4 @@ const pushProfile = function (profile) {
     });
 }
 
-const clearHistory = setInterval(() => fetchHnHistory().then(searchHistory).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click()), 180000);
+const clearHistory = setInterval(() => fetchHnHistory().then(searchHistory).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click()), 300000);
