@@ -122,4 +122,4 @@ const pushProfile = function (profile) {
     });
 }
 
-const clearWhiteboard = setInterval(() => grabWhiteboard().then(pushWhiteboard).then(fetchHn).then(grabProfile).then(pushProfile), 60000);
+const clearWhiteboard = setInterval(() => grabWhiteboard().then(pushWhiteboard).then(fetchHn).then(grabProfile).then(pushProfile).catch(error => console.log(error)), 60000);
