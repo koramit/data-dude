@@ -135,7 +135,7 @@ class Venti
             $monitor[0]['dc'] != $now['dc'] ||
             $monitor[0]['med'] != $now['med'] ||
             $monitor[0]['venti'] != $now['venti'] ||
-            count($monitor) > ($alertAt + 10)
+            count($monitor) > ($alertAt * 1.1)
         ) {
             Cache::put('venti-monitor', []);
 
@@ -144,7 +144,7 @@ class Venti
 
         $monitor[] = $now;
         Cache::put('venti-monitor', $monitor);
-        Log::critical('venti not update for '.count($monitor).' iterations');
+        Log::critical('venti not update for '.count($monitor).' minutes ('.$now['venti'].') cases');
 
         return 'need attention';
     }
