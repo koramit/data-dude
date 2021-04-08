@@ -60,10 +60,10 @@ const searchHistory = async function(stay) {
         dateStart = new Date(firstDate + ' ' + firstTime);
         if (dateRef < dateStart) { // next
             pageNo += (parseInt((maxPage - pageNo) / 2) !== 0 ? parseInt((maxPage - pageNo) / 2) : 1);
-            maxPage = pageNo + 1;
+            minPage = pageNo + 1;
         } else { // previous
             pageNo -= (parseInt((pageNo - minPage) / 2) !== 0 ? parseInt((pageNo - minPage) / 2) : 1);
-            minPage = pageNo - 1;
+            maxPage = pageNo - 1;
         }
         pages[pageNo].click();
         await sleep(6000);
