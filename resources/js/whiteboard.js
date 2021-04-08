@@ -84,8 +84,8 @@ const grabProfile = async function (stay) {
         return profile;
     }
 
-    let events = [...document.querySelectorAll('div.timestamp')];
-    if (events.pop() === undefined ||
+    let timestamps = document.querySelectorAll('div.timestamp');
+    if (timestamps[timestamps.length - 1] === undefined ||
         ! document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(2)') ||
         ! document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(3)')
     ) {
@@ -97,7 +97,7 @@ const grabProfile = async function (stay) {
     profile.no = stay.no;
     profile.hn = document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(2)').textContent.replaceAll("\n", '').replace('HN : ', '').replace(' Search HN', '').trim();
     profile.en = document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(3)').textContent.replaceAll("\n", '').replace('EN : ', '').trim();
-    profile.encountered_at = events.pop().textContent.replaceAll("\n", '').trim();
+    profile.encountered_at = timestamps[timestamps.length - 1].textContent.replaceAll("\n", '').trim();
     profile.insurance = document.querySelector('.scheme-box > div:nth-child(1)').textContent.replaceAll("\n", '').trim();
     profile.cc = document.querySelector('.symptom-box > div:nth-child(1)').textContent.replaceAll("\n", ' | ').replace('CC :', '').trim();
     profile.dx = document.querySelector('.symptom-box > div:nth-child(2)').textContent.replaceAll("\n", ' | ').replace('Dx :', '').trim();
