@@ -213,7 +213,11 @@ class Venti
 
         unset($profile['found']);
         if ($profile['encountered_at']) {
-            $case->encountered_at = Carbon::createFromFormat('H:i D, d M y', $profile['encountered_at'], 'asia/bangkok')->tz('utc');
+            if (strpos(strtolower($profile['encountered_at']), 'today') !== false) {
+                $case->encountered_at = Carbon::parse($profile['encountered_at'], 'asia/bangkok')->tz('UTC');
+            } else {
+                $case->encountered_at = Carbon::createFromFormat('H:i D, d M y', $profile['encountered_at'], 'asia/bangkok')->tz('utc');
+            }
             $updates = true;
         }
         unset($profile['encountered_at']);
