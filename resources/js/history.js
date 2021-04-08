@@ -50,6 +50,8 @@ const searchHistory = async function(stay) {
             break;
         }
 
+        console.log('iterations: ' + iterations + ', page# ' + pageNo);
+
         iterations++;
         firstRow = document.querySelector('mat-row');
         firstDate = firstRow.querySelector('mat-cell.mat-column-Check-in').textContent.trim();
