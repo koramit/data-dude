@@ -213,6 +213,7 @@ class Venti
 
         unset($profile['found']);
         if ($profile['encountered_at']) {
+            Log::critical($profile['encountered_at']);
             if (strpos(strtolower($profile['encountered_at']), 'today') !== false) {
                 $profile['encountered_at'] = strpos($profile['encountered_at'], '-') === false ? $profile['encountered_at'] : trim(explode('-', $profile['encountered_at'])[1]);
                 $case->encountered_at = Carbon::parse($profile['encountered_at'], 'asia/bangkok')->tz('UTC');
@@ -228,6 +229,7 @@ class Venti
         $updates = false;
 
         if (isset($profile['dismissed_at'])) {
+            Log::critical($profile['dismissed_at']);
             if (strpos(strtolower($profile['dismissed_at']), 'today') !== false) {
                 $profile['dismissed_at'] = strpos($profile['dismissed_at'], '-') === false ? $profile['dismissed_at'] : trim(explode('-', $profile['dismissed_at'])[1]);
                 $case->dismissed_at = Carbon::parse($profile['dismissed_at'], 'asia/bangkok')->tz('UTC');
