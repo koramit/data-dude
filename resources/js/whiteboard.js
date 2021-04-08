@@ -84,13 +84,19 @@ const grabProfile = async function (stay) {
     }
 
     let events = [...document.querySelectorAll('div.event')];
+    if (events.pop() !== undefined ||
+        ! document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(2)') ||
+        ! document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(3)')
+    ) {
+        console.log('abort, document not ready');
+        return profile;
+    }
+
     profile.found = true;
     profile.no = stay.no;
     profile.hn = document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(2)').textContent.replaceAll("\n", ' | ').replace('HN : ', '').replace(' Search HN', '').trim();
     profile.en = document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(3)').textContent.replaceAll("\n", ' | ').replace('EN : ', '').trim();
-    if (events.pop() !== undefined) {
-        profile.encountered_at = events.pop() === undefined ?.querySelector('div.timestamp').textContent.replaceAll("\n", ' | ').trim();
-    }
+    profile.encountered_at = events.pop() === undefined ?.querySelector('div.timestamp').textContent.replaceAll("\n", ' | ').trim();
     profile.insurance = document.querySelector('.scheme-box > div:nth-child(1)').textContent.replaceAll("\n", ' | '.trim())
     profile.cc = document.querySelector('.symptom-box > div:nth-child(1)').textContent.replaceAll("\n", ' | ').replace('CC : ', '').trim();
     profile.dx = document.querySelector('.symptom-box > div:nth-child(2)').textContent.replaceAll("\n", ' | ').replace('Dx : ', '').trim();
