@@ -194,6 +194,7 @@ class Venti
                 'no' => $case->no,
                 'pageStart' => $pageStart,
                 'timestamp' => $case->encountered_at->tz('asia/bangkok')->format('Y-m-d H:i'),
+                'timer' => $case->encountered_at->tz('asia/bangkok')->format('H:i'),
             ];
         }
 
