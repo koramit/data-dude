@@ -1,3 +1,5 @@
+const { max } = require("lodash");
+
 const sleep = function (ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -28,18 +30,17 @@ const searchHistory = async function(stay) {
     pages[pageNo].click();
     await sleep(6000);
     let maxPage = 120;
+    let minPage = 0;
+    let iterations = 1;
     let firstRow;
     let firstDate;
     let firstTime;
     let dateRef;
     let dateStart;
-    let iterations = 1;
 
     while (true) {
         let list = document.querySelectorAll('mat-row');
-        console.log(list);
         for(i = 0; i < list.length; i++) {
-            console.log(list[i].querySelector('mat-cell.mat-column-hn').textContent);
             if (list[i].querySelector('mat-cell.mat-column-hn').textContent == stay.hn) {
                 found = true;
                 foundNode = list[i];
@@ -59,8 +60,10 @@ const searchHistory = async function(stay) {
         dateStart = new Date(firstDate + ' ' + firstTime);
         if (dateRef < dateStart) { // next
             pageNo += parseInt((maxPage - pageNo) / 2);
+            maxPage = pageNo;
         } else { // previous
-            pageNo -= parseInt(pageNo / 2);
+            pageNo -= parseInt((pageNo - minPage) / 2);
+            minPage = pageNo;
         }
         pages[pageNo].click();
         await sleep(6000);
