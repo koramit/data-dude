@@ -211,6 +211,10 @@ class Venti
         }
 
         unset($profile['found']);
+        if ($profile['encountered_at']) {
+            $case->encountered_at = Carbon::createFromFormat('H:i D, d M y', $profile['encountered_at'], 'asia/bangkok')->tz('utc');
+            $updates = true;
+        }
         unset($profile['encountered_at']);
         unset($profile['hn']);
         unset($profile['no']);
@@ -218,7 +222,11 @@ class Venti
         $updates = false;
 
         if (isset($profile['dismissed_at'])) {
-            $case->dismissed_at = Carbon::parse($profile['dismissed_at'], 'asia/bangkok')->tz('UTC');
+            if (strpos(strtolower($profile['dismissed_at']), 'today') !== false) {
+                $case->dismissed_at = Carbon::parse($profile['dismissed_at'], 'asia/bangkok')->tz('UTC');
+            } else {
+                $case->dismissed_at = Carbon::createFromFormat('H:i D, d M y', $profile['dismissed_at'], 'asia/bangkok')->tz('utc');
+            }
             $updates = true;
             unset($profile['dismissed_at']);
         }
