@@ -66,9 +66,10 @@ const searchHistory = async function(stay) {
                 break;
             }
         }
-        if (found || ++interations > 20) {
+        if (found || interations > 20) {
             break;
         }
+        interations++;
     }
 
     if (! found) {
@@ -120,4 +121,5 @@ const pushProfile = function (profile) {
     });
 }
 
-const clearHistory = setInterval(() => fetchHnHistory().then(searchHistory).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click()), 300000);
+// const clearHistory = setInterval(() => fetchHnHistory().then(searchHistory).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click()), 300000);
+fetchHnHistory().then(searchHistory).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click());

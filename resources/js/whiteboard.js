@@ -40,6 +40,7 @@ const grabWhiteboard = async function () {
         }
         return patient;
     });
+    await sleep(10000); // array.map() is a sync so, wait for it
     console.log('cases count : ' + patients.length);
 
     return patients;
