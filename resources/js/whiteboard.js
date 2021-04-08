@@ -95,13 +95,13 @@ const grabProfile = async function (stay) {
 
     profile.found = true;
     profile.no = stay.no;
-    profile.hn = document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(2)').textContent.replaceAll("\n", ' | ').replace('HN : ', '').replace(' Search HN', '').trim();
-    profile.en = document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(3)').textContent.replaceAll("\n", ' | ').replace('EN : ', '').trim();
-    profile.encountered_at = events.pop() === undefined ? null : events.pop().querySelector('div.timestamp').textContent.replaceAll("\n", ' | ').trim();
-    profile.insurance = document.querySelector('.scheme-box > div:nth-child(1)').textContent.replaceAll("\n", ' | ').trim();
+    profile.hn = document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(2)').textContent.replaceAll("\n", '').replace('HN : ', '').replace(' Search HN', '').trim();
+    profile.en = document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(3)').textContent.replaceAll("\n", '').replace('EN : ', '').trim();
+    profile.encountered_at = events.pop().querySelector('div.timestamp').textContent.replaceAll("\n", '').trim();
+    profile.insurance = document.querySelector('.scheme-box > div:nth-child(1)').textContent.replaceAll("\n", '').trim();
     profile.cc = document.querySelector('.symptom-box > div:nth-child(1)').textContent.replaceAll("\n", ' | ').replace('CC :', '').trim();
     profile.dx = document.querySelector('.symptom-box > div:nth-child(2)').textContent.replaceAll("\n", ' | ').replace('Dx :', '').trim();
-    profile.location = document.querySelector('.movement-type-box > div:nth-child(1)').textContent.replaceAll("\n", ' | ').trim();
+    profile.location = document.querySelector('.movement-type-box > div:nth-child(1)').textContent.replaceAll("\n", '').trim();
     profile.triage = [...document.querySelector('app-card-triage-detail').querySelectorAll('p')].map(p => p.textContent.replaceAll("\n", ' | ').trim()).join(' | ').trim('|');
     profile.vital_signs = document.querySelector('.vital-sign').textContent.trim().replaceAll("\n", ' | ')
                                 .replace(' Edit', '')
@@ -129,4 +129,5 @@ const pushProfile = function (profile) {
     });
 }
 
-const clearWhiteboard = setInterval(() => grabWhiteboard().then(pushWhiteboard).then(fetchHn).then(grabProfile).then(pushProfile).catch(error => console.log(error)), 60000);
+// const clearWhiteboard = setInterval(() => grabWhiteboard().then(pushWhiteboard).then(fetchHn).then(grabProfile).then(pushProfile).catch(error => console.log(error)), 60000);
+grabWhiteboard().then(pushWhiteboard).then(fetchHn).then(grabProfile).then(pushProfile).catch(error => console.log(error))
