@@ -1,5 +1,3 @@
-const { max } = require("lodash");
-
 const sleep = function (ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -118,4 +116,5 @@ const pushProfile = function (profile) {
     });
 }
 
-const clearHistory = setInterval(() => fetchHnHistory().then(searchHistory).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click()), 180000);
+// const clearHistory = setInterval(() => fetchHnHistory().then(searchHistory).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click()), 180000);
+fetchHnHistory().then(searchHistory).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click());
