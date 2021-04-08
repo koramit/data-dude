@@ -233,7 +233,7 @@ class Venti
         }
 
         foreach ($profile as $key => $value) {
-            if ($case->$key != $value) {
+            if ($value && $case->$key != $value) {
                 $case->$key = $value;
                 $updates = true;
             }
