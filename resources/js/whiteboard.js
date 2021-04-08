@@ -84,7 +84,7 @@ const grabProfile = async function (stay) {
     }
 
     let events = [...document.querySelectorAll('div.event')];
-    if (events.pop() !== undefined ||
+    if (events.pop() === undefined ||
         ! document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(2)') ||
         ! document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(3)')
     ) {
