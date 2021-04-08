@@ -41,12 +41,12 @@ const searchHistory = async function(stay) {
     while (true) {
         let list = document.querySelectorAll('mat-row');
         for(i = 0; i < list.length; i++) {
-            if (list[i].querySelector('mat-cell.mat-column-hn').textContent == stay.hn &&
-                list[i].querySelector('mat-cell.mat-Check-in-time').textContent == stay.timer
+            if (list[i].querySelector('mat-cell.mat-column-hn').textContent.trim() == stay.hn &&
+                list[i].querySelector('mat-cell.mat-column-Check-in-time').textContent.trim() == stay.timer
             ) {
                 found = true;
                 foundNode = list[i];
-                outcome = list[i].querySelector('mat-cell.mat-column-dispose').textContent;
+                outcome = list[i].querySelector('mat-cell.mat-column-dispose').textContent.trim();
                 break;
             }
         }
