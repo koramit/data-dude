@@ -29,12 +29,14 @@ const searchHistory = async function(stay) {
     await sleep(6000);
     let maxPage = 120;
     let minPage = 0;
+    let dateRef = new Date(stay.timestamp);
     let iterations = 1;
     let firstRow;
     let firstDate;
     let firstTime;
-    let dateRef;
     let dateStart;
+
+    console.log('Search for HN ' + stay.hn + ' @ ' + dateRef);
 
     while (true) {
         let list = document.querySelectorAll('mat-row');
@@ -56,7 +58,6 @@ const searchHistory = async function(stay) {
         firstRow = document.querySelector('mat-row');
         firstDate = firstRow.querySelector('mat-cell.mat-column-Check-in').textContent.trim();
         firstTime = firstRow.querySelector('mat-cell.mat-column-Check-in-time').textContent.trim();
-        dateRef = new Date(stay.timestamp);
         dateStart = new Date(firstDate + ' ' + firstTime);
         if (dateRef < dateStart) { // next
             minPage = pageNo + 1;
