@@ -27,22 +27,14 @@ const searchHistory = async function(stay) {
 
     pages[pageNo].click();
     await sleep(6000);
-    let maxPage = 80;
-
-    // let firstRow = document.querySelector('mat-row');
-    // let firstDate = firstRow.querySelector('mat-cell.mat-column-Check-in').textContent.trim();
-    // let firstTime = firstRow.querySelector('mat-cell.mat-column-Check-in-time').textContent.trim();
-    // let dateRef = new Date(stay.timestamp);
-    // let dateStart = new Date(firstDate + ' ' + firstTime);
-
+    let maxPage = 120;
     let firstRow;
     let firstDate;
     let firstTime;
     let dateRef;
     let dateStart;
-
-    /////
     let iterations = 1;
+
     while (true) {
         let list = document.querySelectorAll('mat-row');
         console.log(list);
@@ -123,5 +115,4 @@ const pushProfile = function (profile) {
     });
 }
 
-// const clearHistory = setInterval(() => fetchHnHistory().then(searchHistory).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click()), 300000);
-fetchHnHistory().then(searchHistory).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click());
+const clearHistory = setInterval(() => fetchHnHistory().then(searchHistory).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click()), 180000);
