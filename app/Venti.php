@@ -259,30 +259,33 @@ class Venti
         }
     }
 
-    public static function sync($cases)
+    public static function sync()
     {
-        $cases = $cases->transform(function ($case) {
-            $triage = $case->clean_triage;
+        $cases = VentiRecord::whereMedicine(true)
+                            ->whereNeedSync(true)
+                            ->get()
+                            ->transform(function ($case) {
+                                $triage = $case->clean_triage;
 
-            return [
-                'no' => $case->no,
-                'location' => $case->location,
-                'hn' => $case->hn,
-                'cc' => $case->cc,
-                'dx' => $case->dx,
-                'via' => $triage['via'] ?? null,
-                'severity' => $triage['severity'] ?? null,
-                'mobility' => $triage['mobility'] ?? null,
-                'counter' => $case->counter,
-                'insurance' => $case->insurance,
-                'outcome' => $case->outcome,
-                'vital_signs' => $case->clean_vital_signs,
-                'remark' => $case->remark,
-                'encountered_at' => $case->encountered_at,
-                'dismissed_at' => $case->dismissed_at,
-                'tagged_med_at' => $case->tagged_med_at,
-            ];
-        });
+                                return [
+                                    'no' => $case->no,
+                                    'location' => $case->location,
+                                    'hn' => $case->hn,
+                                    'cc' => $case->cc,
+                                    'dx' => $case->dx,
+                                    'via' => $triage['via'] ?? null,
+                                    'severity' => $triage['severity'] ?? null,
+                                    'mobility' => $triage['mobility'] ?? null,
+                                    'counter' => $case->counter,
+                                    'insurance' => $case->insurance,
+                                    'outcome' => $case->outcome,
+                                    'vital_signs' => $case->clean_vital_signs,
+                                    'remark' => $case->remark,
+                                    'encountered_at' => $case->encountered_at ? $case->encountered_at->format('Y-m-d H:i:s') : null,
+                                    'dismissed_at' => $case->dismissed_at ? $case->dismissed_at->format('Y-m-d H:i:s') : null,
+                                    'tagged_med_at' => $case->tagged_med_at ? $case->tagged_med_at->format('Y-m-d H:i:s') : null,
+                                ];
+                            });
 
         return $cases;
         // $response = Http::withHeaders(['token' => 'tokentoken'])
