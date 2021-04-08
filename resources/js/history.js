@@ -27,47 +27,50 @@ const searchHistory = async function(stay) {
 
     pages[pageNo].click();
     await sleep(6000);
-    let firstRow = document.querySelector('mat-row');
-    let firstDate = firstRow.querySelector('mat-cell.mat-column-Check-in').textContent.trim();
-    let firstTime = firstRow.querySelector('mat-cell.mat-column-Check-in-time').textContent.trim();
-    let dateRef = new Date(stay.timestamp);
-    let dateStart = new Date(firstDate + ' ' + firstTime);
+    let maxPage = 80;
 
-    if (dateRef < dateStart) {
-        while(! found && pageNo < stay.pageStart + 40) {
-            pages[pageNo].click();
-            await sleep(6000);
-            let list = document.querySelectorAll('mat-row');
-            for(i = 0; i < list.length; i++) {
-                if (list[i].querySelector('mat-cell.mat-column-hn').textContent == stay.hn) {
-                    found = true;
-                    foundNode = list[i];
-                    outcome = list[i].querySelector('mat-cell.mat-column-dispose').textContent;
-                    break;
-                }
-            }
-            pageNo++;
+    // let firstRow = document.querySelector('mat-row');
+    // let firstDate = firstRow.querySelector('mat-cell.mat-column-Check-in').textContent.trim();
+    // let firstTime = firstRow.querySelector('mat-cell.mat-column-Check-in-time').textContent.trim();
+    // let dateRef = new Date(stay.timestamp);
+    // let dateStart = new Date(firstDate + ' ' + firstTime);
+
+    let firstRow;
+    let firstDate;
+    let firstTime;
+    let dateRef;
+    let dateStart;
+
+    /////
+    let iterations = 1;
+    while (true) {
+        firstRow = document.querySelector('mat-row');
+        firstDate = firstRow.querySelector('mat-cell.mat-column-Check-in').textContent.trim();
+        firstTime = firstRow.querySelector('mat-cell.mat-column-Check-in-time').textContent.trim();
+        dateRef = new Date(stay.timestamp);
+        dateStart = new Date(firstDate + ' ' + firstTime);
+        if (dateRef < dateStart) { // next
+            pageNo += parseInt((maxPage - pageNo) / 2);
+        } else { // previous
+            pageNo -= parseInt(pageNo / 2);
         }
-    } else {
-        while(! found && pageNo > stay.pageStart - 40) {
-            pages[pageNo].click();
-            await sleep(6000);
-            let list = document.querySelectorAll('mat-row');
-            for(i = 0; i < list.length; i++) {
-                if (list[i].querySelector('mat-cell.mat-column-hn').textContent == stay.hn) {
-                    found = true;
-                    foundNode = list[i];
-                    outcome = list[i].querySelector('mat-cell.mat-column-dispose').textContent;
-                    dismissedAt = list[i].querySelector('mat-cell.mat-column-Check-out').textContent + ' ' + list[i].querySelector('mat-cell.mat-column-Check-out-time').textContent;
-                    break;
-                }
-            }
-            pageNo--;
-            if (pageNo < 0) {
+        pages[pageNo].click();
+        await sleep(6000);
+
+        let list = document.querySelectorAll('mat-row');
+        for(i = 0; i < list.length; i++) {
+            if (list[i].querySelector('mat-cell.mat-column-hn').textContent == stay.hn) {
+                found = true;
+                foundNode = list[i];
+                outcome = list[i].querySelector('mat-cell.mat-column-dispose').textContent;
                 break;
             }
         }
+        if (found || ++interations > 20) {
+            break;
+        }
     }
+
     if (! found) {
         return profile;
     }
@@ -82,12 +85,12 @@ const searchHistory = async function(stay) {
     profile.hn = document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(2)').textContent.replaceAll("\n", ' | ').replace('HN : ', '').replace(' Search HN', '').trim();
     profile.en = document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(3)').textContent.replaceAll("\n", ' | ').replace('EN : ', '').trim();
     profile.encountered_at = events.pop().querySelector('div.timestamp').textContent.replaceAll("\n", ' | ').trim();
-    profile.insurance = document.querySelector('.scheme-box > div:nth-child(1)').textContent.replaceAll("\n", ' | '.trim())
-    profile.cc = document.querySelector('.symptom-box > div:nth-child(1)').textContent.replaceAll("\n", ' | ').replace('CC : ', '').trim();
-    profile.dx = document.querySelector('.symptom-box > div:nth-child(2)').textContent.replaceAll("\n", ' | ').replace('Dx : ', '').trim();
+    profile.insurance = document.querySelector('.scheme-box > div:nth-child(1)').textContent.replaceAll("\n", ' | ').trim();
+    profile.cc = document.querySelector('.symptom-box > div:nth-child(1)').textContent.replaceAll("\n", ' | ').replace('CC :', '').trim();
+    profile.dx = document.querySelector('.symptom-box > div:nth-child(2)').textContent.replaceAll("\n", ' | ').replace('Dx :', '').trim();
     profile.location = document.querySelector('.movement-type-box > div:nth-child(1)').textContent.replaceAll("\n", ' | ').trim();
     profile.triage = [...document.querySelector('app-card-triage-detail').querySelectorAll('p')].map(p => p.textContent.replaceAll("\n", ' | ').trim()).join(' | ').trim('|');
-    profile.vital_signs = document.querySelector('.vital-sign').textContent.trim()
+    profile.vital_signs = document.querySelector('.vital-sign').textContent.trim().replaceAll("\n", ' | ')
                                 .replace(' Edit', '')
                                 .replace('T', 'T: ')
                                 .replace('PR', ' | PR: ')
