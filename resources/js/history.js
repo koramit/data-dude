@@ -44,6 +44,22 @@ const searchHistory = async function(stay) {
     /////
     let iterations = 1;
     while (true) {
+        let list = document.querySelectorAll('mat-row');
+        console.log(list);
+        for(i = 0; i < list.length; i++) {
+            console.log(list[i].querySelector('mat-cell.mat-column-hn').textContent);
+            if (list[i].querySelector('mat-cell.mat-column-hn').textContent == stay.hn) {
+                found = true;
+                foundNode = list[i];
+                outcome = list[i].querySelector('mat-cell.mat-column-dispose').textContent;
+                break;
+            }
+        }
+        if (found || iterations > 20) {
+            break;
+        }
+
+        iterations++;
         firstRow = document.querySelector('mat-row');
         firstDate = firstRow.querySelector('mat-cell.mat-column-Check-in').textContent.trim();
         firstTime = firstRow.querySelector('mat-cell.mat-column-Check-in-time').textContent.trim();
@@ -56,20 +72,6 @@ const searchHistory = async function(stay) {
         }
         pages[pageNo].click();
         await sleep(6000);
-
-        let list = document.querySelectorAll('mat-row');
-        for(i = 0; i < list.length; i++) {
-            if (list[i].querySelector('mat-cell.mat-column-hn').textContent == stay.hn) {
-                found = true;
-                foundNode = list[i];
-                outcome = list[i].querySelector('mat-cell.mat-column-dispose').textContent;
-                break;
-            }
-        }
-        if (found || interations > 20) {
-            break;
-        }
-        interations++;
     }
 
     if (! found) {
