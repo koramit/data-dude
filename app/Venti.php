@@ -178,13 +178,14 @@ class Venti
         if (! $case) {
             // search 'outcome' => 'case removed' in case of accidently DC from whiteboard
             $case = VentiRecord::whereOutcome('case removed')
-                               ->orderByDesc('medicine')
-                               ->orderBy('encountered_at')
+                               ->orderBy('updated_at')
                                ->first();
 
             if (! $case) {
                 return ['hn' => false];
             }
+
+            $case->touch();
         }
 
         $lastRotate = Cache::get('venti-last-history-search', '');
@@ -199,13 +200,9 @@ class Venti
                 'timestamp' => $case->encountered_at->tz('asia/bangkok')->format('Y-m-d H:i'),
                 'timer' => $case->encountered_at->tz('asia/bangkok')->format('H:i'),
             ];
-        } else {
-            Cache::put('venti-last-history-search', ''); // give it second chance
-            if ($case->outcome == 'case removed') {
-                $case->update(['outcome' => null]);
-            }
         }
 
+        Cache::put('venti-last-history-search', ''); // give it second chance
         $case->update(['outcome' => 'case removed']);
 
         return ['hn' => false];
