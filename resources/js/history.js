@@ -11,10 +11,15 @@ const fetchHnHistory = async function () {
 
 const searchHistory = async function(stay) {
     let profile = { found: false };
-
     if (stay.hn === false) {
         return profile;
     }
+
+    // pseudo refresh
+    document.querySelector('div.sidenav-item:nth-child(2)').click();
+    await sleep(10000);
+    document.querySelector('div.sidenav-item:nth-child(9)').click();
+    await sleep(10000);
 
     [...document.querySelectorAll('div.mat-select-trigger')].pop().click();
     await sleep(5000);
@@ -22,21 +27,22 @@ const searchHistory = async function(stay) {
     let pageNo = stay.pageStart - 1;
     let found = false;
     let pageVisited = [];
-    let foundNode;
-    let outcome;
-    let dismissedAt;
-
-    pages[pageNo].click();
-    pageVisited.push(pageNo);
-    await sleep(6000);
     let maxPage = 120;
     let minPage = 0;
     let dateRef = new Date(stay.timestamp);
     let iterations = 1;
+
+    let foundNode;
+    let outcome;
+    let dismissedAt;
     let firstRow;
     let firstDate;
     let firstTime;
     let dateStart;
+
+    pages[pageNo].click();
+    pageVisited.push(pageNo);
+    await sleep(6000);
 
     console.log('Search for HN ' + stay.hn + ' @ ' + dateRef);
 
@@ -126,10 +132,4 @@ const pushProfile = async function (profile) {
     });
 }
 
-const switchPage = async function () {
-    document.querySelector('div.sidenav-item:nth-child(2)').click();
-    await sleep(10000);
-    document.querySelector('div.sidenav-item:nth-child(9)').click();
-}
-
-const clearHistory = setInterval(() => fetchHnHistory().then(searchHistory).then(pushProfile).then(switchPage).catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click()), 180000);
+const clearHistory = setInterval(() => fetchHnHistory().then(searchHistory).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click()), 180000);
