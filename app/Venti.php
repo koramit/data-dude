@@ -21,6 +21,9 @@ class Venti
             $los = explode(':', $patient['los']);
             unset($patient['los']);
             $minutes = (((int) $los[0]) ?? 0) * 60;
+            if (isset($los[1]) && ((int) $los[1]) < 0) { // sometime, whiteboard show LOS x:-1
+                continue;
+            }
             $minutes += (((int) $los[1]) ?? 0);
             $minutes = $minutes < 0 ? 0 : ($minutes * -1);
             $encounteredAt = now()->addMinutes($minutes);
