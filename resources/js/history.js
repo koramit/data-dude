@@ -21,11 +21,13 @@ const searchHistory = async function(stay) {
     let pages = document.querySelector('div.mat-select-content').querySelectorAll('mat-option');
     let pageNo = stay.pageStart - 1;
     let found = false;
+    let pageVisited = [];
     let foundNode;
     let outcome;
     let dismissedAt;
 
     pages[pageNo].click();
+    pageVisited.push(pageNo);
     await sleep(6000);
     let maxPage = 120;
     let minPage = 0;
@@ -68,7 +70,11 @@ const searchHistory = async function(stay) {
             maxPage = pageNo - 1;
             pageNo -= (parseInt((pageNo - minPage) / 2) !== 0 ? parseInt((pageNo - minPage) / 2) : 1);
         }
+        if (pageVisited.indexOf(pageNo) !== -1) {
+            break;
+        }
         pages[pageNo].click();
+        pageVisited.push(pageNo);
         await sleep(6000);
     }
 
@@ -102,10 +108,12 @@ const searchHistory = async function(stay) {
     return profile;
 }
 
-const pushProfile = function (profile) {
+const pushProfile = async function (profile) {
     if (! profile.found) {
         document.querySelector('div.sidenav-item:nth-child(9)').click();
         console.log('no case to update');
+        document.querySelector('div.sidenav-item:nth-child(2)').click();
+        await sleep(10000);
         return 0;
     }
 
@@ -116,10 +124,10 @@ const pushProfile = function (profile) {
     }).then(res => res.json())
     .then(data => {
         console.log(data);
-        document.querySelector('div.sidenav-item:nth-child(9)').click();
+        document.querySelector('div.sidenav-item:nth-child(2)').click();
+        await sleep(10000);
         return 1;
     });
 }
 
-// const clearHistory = setInterval(() => fetchHnHistory().then(searchHistory).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click()), 180000);
-fetchHnHistory().then(searchHistory).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click());
+const clearHistory = setInterval(() => fetchHnHistory().then(searchHistory).then(pushProfile).then(() => document.querySelector('div.sidenav-item:nth-child(9)').catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click()), 180000);
