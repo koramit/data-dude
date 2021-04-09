@@ -112,8 +112,6 @@ const pushProfile = async function (profile) {
     if (! profile.found) {
         document.querySelector('div.sidenav-item:nth-child(9)').click();
         console.log('no case to update');
-        document.querySelector('div.sidenav-item:nth-child(2)').click();
-        await sleep(10000);
         return 0;
     }
 
@@ -124,10 +122,14 @@ const pushProfile = async function (profile) {
     }).then(res => res.json())
     .then(data => {
         console.log(data);
-        document.querySelector('div.sidenav-item:nth-child(2)').click();
-        await sleep(10000);
         return 1;
     });
 }
 
-const clearHistory = setInterval(() => fetchHnHistory().then(searchHistory).then(pushProfile).then(() => document.querySelector('div.sidenav-item:nth-child(9)').catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click()), 180000);
+const switchPage = async function () {
+    document.querySelector('div.sidenav-item:nth-child(2)').click();
+    await sleep(10000);
+    document.querySelector('div.sidenav-item:nth-child(9)').click();
+}
+
+const clearHistory = setInterval(() => fetchHnHistory().then(searchHistory).then(pushProfile).then(switchPage).catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click()), 180000);
