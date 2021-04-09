@@ -199,6 +199,8 @@ class Venti
                 'timestamp' => $case->encountered_at->tz('asia/bangkok')->format('Y-m-d H:i'),
                 'timer' => $case->encountered_at->tz('asia/bangkok')->format('H:i'),
             ];
+        } else {
+            Cache::put('venti-last-history-search', ''); // give it second chance
         }
 
         $case->update(['outcome' => 'case removed']);
