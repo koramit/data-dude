@@ -34,7 +34,6 @@ const searchHistory = async function(stay) {
 
     let foundNode;
     let outcome;
-    let dismissedAt;
     let firstRow;
     let firstDate;
     let firstTime;
@@ -90,14 +89,33 @@ const searchHistory = async function(stay) {
 
     foundNode.click();
     await sleep(10000);
-    let events = [...document.querySelectorAll('div.event')];
+
+    let events = document.querySelectorAll('div.event');
+    if (events === undefined || events.length === 0 ||
+        ! document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(2)') ||
+        ! document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(3)')
+    ) {
+        console.log('abort, document not ready');
+        return profile;
+    }
+
+    for(i = 0; i < events.length; i++) {
+        if (events[i].textContent.indexOf('Check-in Time') !== -1) {
+            profile.encountered_at = events[i].querySelector('.timestamp').textContent.replaceAll("\n", '').trim();
+        } else if (events[i].textContent.indexOf('Check-out Time') !== -1) {
+            profile.dismissed_at = events[i].querySelector('.timestamp').textContent.replaceAll("\n", '').trim();
+        }
+
+        if (profile.encountered_at !== undefined && profile.dismissed_at !== undefined) {
+            break;
+        }
+    }
+
     profile.found = true;
     profile.no = stay.no;
     profile.outcome = outcome;
-    profile.dismissed_at = dismissedAt;
     profile.hn = document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(2)').textContent.replaceAll("\n", ' | ').replace('HN : ', '').replace(' Search HN', '').trim();
     profile.en = document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(3)').textContent.replaceAll("\n", ' | ').replace('EN : ', '').trim();
-    profile.encountered_at = events.pop().querySelector('div.timestamp').textContent.replaceAll("\n", ' | ').trim();
     profile.insurance = document.querySelector('.scheme-box > div:nth-child(1)').textContent.replaceAll("\n", ' | ').trim();
     profile.cc = document.querySelector('.symptom-box > div:nth-child(1)').textContent.replaceAll("\n", ' | ').replace('CC :', '').trim();
     profile.dx = document.querySelector('.symptom-box > div:nth-child(2)').textContent.replaceAll("\n", ' | ').replace('Dx :', '').trim();
