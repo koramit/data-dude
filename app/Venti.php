@@ -201,6 +201,9 @@ class Venti
             ];
         } else {
             Cache::put('venti-last-history-search', ''); // give it second chance
+            if ($case->outcome == 'case removed') {
+                $case->update(['outcome' => null]);
+            }
         }
 
         $case->update(['outcome' => 'case removed']);
