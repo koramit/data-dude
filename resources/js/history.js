@@ -63,12 +63,11 @@ const searchHistory = async function(stay) {
     let firstTime;
     let dateStart;
 
+    console.log('Search for HN ' + stay.hn + ' @ ' + dateRef);
     pages[pageNo].click();
     pageVisited.push(pageNo);
     console.log('iterations: ' + iterations + ', page# ' + (pageNo+1));
     await sleep(10000);
-
-    console.log('Search for HN ' + stay.hn + ' @ ' + dateRef);
 
     while (true) {
         let list = document.querySelectorAll('mat-row');
