@@ -96,18 +96,29 @@ class Venti
             }
         }
 
-        // dismiss cases thoses removed from whiteboard
+        // breaker
+        $lastcounts = Cache::get('lastcounts', collect([]));
         $list = collect($patients)->pluck('hn')->toArray();
-        VentiRecord::whereNull('dismissed_at')
-                ->whereNotIn('hn', $list)
-                ->get()
-                ->each(function ($case) {
-                    $case->dismissed_at = now();
-                    if ($case->medicine) {
-                        $case->need_sync = true; // sync med case only
-                    }
-                    $case->save();
-                });
+        $listCount = count($list);
+        $lastcounts->push($listCount);
+        if ($lastcounts->count() > 3) {
+            $lastcounts->shift();
+        }
+        Cache::put('lastcounts', $lastcounts);
+
+        if ($lastcounts->avg() - $listCount <= 5) {
+            // dismiss cases thoses removed from whiteboard
+            VentiRecord::whereNull('dismissed_at')
+                    ->whereNotIn('hn', $list)
+                    ->get()
+                    ->each(function ($case) {
+                        $case->dismissed_at = now();
+                        if ($case->medicine) {
+                            $case->need_sync = true; // sync med case only
+                        }
+                        $case->save();
+                    });
+        }
 
         // TODO sync data
     }

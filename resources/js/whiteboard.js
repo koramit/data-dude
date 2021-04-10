@@ -2,8 +2,6 @@ const sleep = function (ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-const counts = [];
-
 const grabWhiteboard = async function () {
     console.log('iteration started.');
     document.querySelector('div.sidenav-item:nth-child(2)').click();
@@ -45,22 +43,6 @@ const grabWhiteboard = async function () {
     });
     await sleep(15000); // array.map() is a sync so, wait for it
     console.log('cases count : ' + patients.length);
-
-    if (counts.length > 5) {
-        counts.shift();
-    }
-    counts.push(patients.length);
-
-    let avg = 0;
-    for(let i = 0; i < counts.length; i++) {
-        avg += counts[i];
-    }
-    avg = parseInt(avg / counts.length);
-
-    if ((avg - patients.length) > 5) {
-        console.log('Breaker !!!');
-        return [];
-    }
     return patients;
 }
 
