@@ -205,6 +205,7 @@ class Venti
             return [
                 'hn' => $case->hn,
                 'no' => $case->no,
+                'medicine' => $case->medicine,
                 'pageStart' => $pageStart,
                 'maxPage' => (int) ($daysInReal * 12),
                 'timestamp' => $case->encountered_at->tz('asia/bangkok')->format('Y-m-d H:i'),

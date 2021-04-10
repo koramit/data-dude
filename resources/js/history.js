@@ -3,10 +3,14 @@ const sleep = function (ms) {
 }
 
 
-const timeEquivalent = function (a, b) {
+const timeEquivalent = function (a, b, exactly) {
     console.log([a,b].join(' => '));
     if (a === b) {
         return true;
+    }
+
+    if (exactly) {
+        return false;
     }
 
     let timeA = a.split(':');
@@ -73,7 +77,7 @@ const searchHistory = async function(stay) {
         let list = document.querySelectorAll('mat-row');
         for(i = 0; i < list.length; i++) {
             if (list[i].querySelector('mat-cell.mat-column-hn').textContent.trim() == stay.hn &&
-                timeEquivalent(list[i].querySelector('mat-cell.mat-column-Check-in-time').textContent.trim(), stay.timer)
+                timeEquivalent(list[i].querySelector('mat-cell.mat-column-Check-in-time').textContent.trim(), stay.timer, stay.medicine)
             ) {
                 found = true;
                 foundNode = list[i];
