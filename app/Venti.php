@@ -47,6 +47,14 @@ class Venti
             }
 
             if (! $case) { // new case - create
+                $duplicateCase = VentiRecord::whereHn($patient['hn'])
+                                            ->whereNull('dismissed_at')
+                                            ->first();
+
+                if ($duplicateCase) {
+                    continue;
+                }
+
                 $patient += [
                     'no' => $encounteredAt->format('ymdHi').$patient['hn'],
                     'encountered_at' => $encounteredAt,
