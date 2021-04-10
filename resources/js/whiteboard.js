@@ -71,6 +71,10 @@ const grabProfile = async function (stay) {
     if (stay.hn === false) {
         return profile;
     }
+    if (document.readyState !== 'complete' || document.querySelector('div.item-list') === null) {
+        console.log('abort, document not ready');
+        return profile;
+    }
     let items = [...document.querySelector('div.item-list').querySelectorAll('div.item')];
     let nodes = items.filter(item => item.textContent.indexOf(stay.hn) != -1) // hn must available
     if (nodes.length == 0) {
