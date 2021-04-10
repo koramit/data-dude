@@ -3,6 +3,7 @@ const sleep = function (ms) {
 }
 
 const grabWhiteboard = async function () {
+    console.log('iteration started.');
     document.querySelector('div.sidenav-item:nth-child(2)').click();
     await sleep(15000);
     if (document.querySelector('div.item-list') === null) {

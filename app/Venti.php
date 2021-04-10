@@ -199,12 +199,14 @@ class Venti
         $lastRotate = Cache::get('venti-last-history-search', '');
         if ($case->no != $lastRotate) {
             Cache::put('venti-last-history-search', $case->no);
-            $pageStart = ((int) (now()->diffInHours($case->encountered_at) / 24) + 1) * 6;
+            $daysInReal = now()->diffInHours($case->encountered_at) / 24;
+            $pageStart = ((int) ($daysInReal) + 1) * 6;
 
             return [
                 'hn' => $case->hn,
                 'no' => $case->no,
                 'pageStart' => $pageStart,
+                'maxPage' => (int) ($daysInReal * 12),
                 'timestamp' => $case->encountered_at->tz('asia/bangkok')->format('Y-m-d H:i'),
                 'timer' => $case->encountered_at->tz('asia/bangkok')->format('H:i'),
             ];
