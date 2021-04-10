@@ -4,7 +4,7 @@ const sleep = function (ms) {
 
 const grabWhiteboard = async function () {
     document.querySelector('div.sidenav-item:nth-child(2)').click();
-    await sleep(10000);
+    await sleep(15000);
     if (document.readyState !== 'complete' || document.querySelector('div.item-list') === null) {
         console.log('abort, document not ready');
         return [];
@@ -40,7 +40,7 @@ const grabWhiteboard = async function () {
         }
         return patient;
     });
-    await sleep(10000); // array.map() is a sync so, wait for it
+    await sleep(15000); // array.map() is a sync so, wait for it
     console.log('cases count : ' + patients.length);
 
     return patients;
@@ -82,7 +82,7 @@ const grabProfile = async function (stay) {
     }
     let node = nodes[0];
     node.click();
-    await sleep(10000);
+    await sleep(15000);
     if (document.readyState !== 'complete') {
         console.log('abort, document not ready');
         return profile;
