@@ -5,7 +5,7 @@ const sleep = function (ms) {
 const grabWhiteboard = async function () {
     document.querySelector('div.sidenav-item:nth-child(2)').click();
     await sleep(15000);
-    if (document.readyState !== 'complete' || document.querySelector('div.item-list') === null) {
+    if (document.querySelector('div.item-list') === null) {
         console.log('abort, document not ready');
         return [];
     }
@@ -71,7 +71,7 @@ const grabProfile = async function (stay) {
     if (stay.hn === false) {
         return profile;
     }
-    if (document.readyState !== 'complete' || document.querySelector('div.item-list') === null) {
+    if (document.querySelector('div.item-list') === null) {
         console.log('abort, document not ready');
         return profile;
     }
@@ -83,10 +83,6 @@ const grabProfile = async function (stay) {
     let node = nodes[0];
     node.click();
     await sleep(15000);
-    if (document.readyState !== 'complete') {
-        console.log('abort, document not ready');
-        return profile;
-    }
 
     let events = document.querySelectorAll('div.event');
     if (events === undefined || events.length === 0 ||
