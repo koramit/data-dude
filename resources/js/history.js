@@ -4,6 +4,7 @@ const sleep = function (ms) {
 
 
 const timeEquivalent = function (a, b) {
+    console.log([a,b].join(' => '));
     if (a === b) {
         return true;
     }
@@ -45,7 +46,7 @@ const searchHistory = async function(stay) {
     await sleep(10000);
 
     [...document.querySelectorAll('div.mat-select-trigger')].pop().click();
-    await sleep(5000);
+    await sleep(10000);
     let pages = document.querySelector('div.mat-select-content').querySelectorAll('mat-option');
     let pageNo = stay.pageStart - 1;
     let found = false;
@@ -64,7 +65,8 @@ const searchHistory = async function(stay) {
 
     pages[pageNo].click();
     pageVisited.push(pageNo);
-    await sleep(6000);
+    console.log('iterations: ' + iterations + ', page# ' + (pageNo+1));
+    await sleep(10000);
 
     console.log('Search for HN ' + stay.hn + ' @ ' + dateRef);
 
@@ -80,12 +82,9 @@ const searchHistory = async function(stay) {
                 break;
             }
         }
-        if (found || iterations > 20) {
+        if (found || iterations > 12) {
             break;
         }
-
-        console.log('iterations: ' + iterations + ', page# ' + pageNo);
-
         iterations++;
         firstRow = document.querySelector('mat-row');
         firstDate = firstRow.querySelector('mat-cell.mat-column-Check-in').textContent.trim();
@@ -103,7 +102,8 @@ const searchHistory = async function(stay) {
         }
         pages[pageNo].click();
         pageVisited.push(pageNo);
-        await sleep(6000);
+        console.log('iterations: ' + iterations + ', page# ' + (pageNo+1));
+        await sleep(10000);
     }
 
     if (! found) {
