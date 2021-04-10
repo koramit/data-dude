@@ -2,6 +2,29 @@ const sleep = function (ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+
+const timeEquivalent = function (a, b) {
+    if (a === b) {
+        return true;
+    }
+
+    let timeA = a.split(':');
+    let timeB = b.split(':');
+
+    if (parseInt(timeA[0]) !== parseInt(timeB[0])) {
+        return false;
+    }
+
+    let minuteA = parseInt(timeA[1]);
+    let minuteB = parseInt(timeB[1]);
+
+    if (minuteA === minuteB || Math.abs(minuteA - minuteB) <= 5) {
+        return true;
+    }
+
+    return false;
+}
+
 const fetchHnHistory = async function () {
     return fetch('http://172.21.106.10:7070/dudes/venti/hn/history', {
         method: 'post',
@@ -49,7 +72,7 @@ const searchHistory = async function(stay) {
         let list = document.querySelectorAll('mat-row');
         for(i = 0; i < list.length; i++) {
             if (list[i].querySelector('mat-cell.mat-column-hn').textContent.trim() == stay.hn &&
-                list[i].querySelector('mat-cell.mat-column-Check-in-time').textContent.trim() == stay.timer
+                timeEquivalent(list[i].querySelector('mat-cell.mat-column-Check-in-time').textContent.trim(), stay.timer)
             ) {
                 found = true;
                 foundNode = list[i];
