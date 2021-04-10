@@ -5,7 +5,7 @@ const sleep = function (ms) {
 const grabWhiteboard = async function () {
     document.querySelector('div.sidenav-item:nth-child(2)').click();
     await sleep(10000);
-    if (document.readyState !== 'complete') {
+    if (document.readyState !== 'complete' || document.querySelector('div.item-list') === null) {
         console.log('abort, document not ready');
         return [];
     }
