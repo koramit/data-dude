@@ -85,9 +85,9 @@ const grabProfile = async function (stay) {
     await sleep(15000);
 
     let events = document.querySelectorAll('div.event');
-    if (events === undefined || events.length === 0 ||
-        ! document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(2)') ||
-        ! document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(3)')
+    if (events === null ||
+        document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(2)') === null ||
+        document.querySelector('.bio-box > div:nth-child(2) > div:nth-child(3)') === null
     ) {
         console.log('abort, document not ready');
         return profile;
