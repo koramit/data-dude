@@ -134,7 +134,7 @@ class Venti
             'cases' => VentiRecord::count(),
             'dc' => VentiRecord::wherenotNull('dismissed_at')->count(),
             'med' => VentiRecord::whereMedicine(true)->count(),
-            'venti' => count(Cache::get('latestlist', [])),
+            'venti' => count(Cache::get('lastcounts')->last()),
         ];
         $monitor = Cache::get('venti-monitor', []);
 

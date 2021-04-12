@@ -176,4 +176,4 @@ const pushProfile = async function (profile) {
     });
 }
 
-const clearHistory = setInterval(() => fetchHnHistory().then(searchHistory).then(pushProfile).catch(() => document.querySelector('div.sidenav-item:nth-child(9)').click()), 180000);
+const clearHistory = setInterval(() => fetchHnHistory().then(searchHistory).then(pushProfile).catch((error) => console.log(error)), 210000);
